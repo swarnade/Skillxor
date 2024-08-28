@@ -4,7 +4,7 @@
   "description": "Server For Swarnadeep's SIH TEAM",
   "main": "app.js",
   "scripts": {
-    "test": "npm start"
+    "test": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "mongodb": "^6.8.0"
+    "mongodb": "^6.8.0",
+    "nodemon": "^3.1.4"
   }
 }
