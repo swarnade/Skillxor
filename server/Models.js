@@ -12,10 +12,10 @@ db.once('open',() => {
 
 
 // Freelancer Schema
-const Freelancer1 = mongoose.Schema({
+const Freelancer = mongoose.Schema({
     _id: {type:String},
     Name: {type:String},
-    MobileNumber: {type:String},
+    Mobile_Number: {type:String},
     Email: {type:String},
     Password: {type:String},
 });
@@ -23,8 +23,8 @@ const Freelancer1 = mongoose.Schema({
 
 
 // Freelancer Model
-const Freelancer = mongoose.model('Freelancers', Freelancer1);
+const Freelancers = mongoose.model('Users', Freelancer);
 
 module.exports = {
-    Freelancer:Freelancer,
+    Freelancers:Freelancers,
 };
