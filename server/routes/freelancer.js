@@ -84,16 +84,66 @@ freelancer.post("/signup", async (req, res) => {
           await DataSave.save().then(() => {
             res.status(200).json({status:200, success:true, message:"Account successfully created."});
           }).catch(()=>{
-            res.status(200).json({status:500, success:true, message:"Unable to create account, try again later."});
+            res.status(200).json({status:500, success:false, message:"Unable to create account, try again later."});
           });
         }else{
-          res.status(401).json({status:401, success:true, message:"Already have an account with this email."});
+          res.status(401).json({status:401, success:false, message:"Already have an account with this email."});
         }
       }else{
         res.status(200).json({status:200, success:false, message:Validation});
       }
     }catch {
       res.status(500).json({status:500, success:false, message:"Unable to create account, try again later."});
+    };
+  }
+
+  main().catch();
+});
+
+
+
+
+
+
+
+
+//Freelancer Login
+freelancer.post("/login", async (req, res) => {
+
+
+  function ValidationCheck(body) {
+    
+    if(body.Email == undefined || !ValidMail(body.Email) ){
+      return "Enter a valid email";
+    }
+    if(body.Password == undefined || !ValidPassword(body.Password) ){
+      return "Password must be at least 8 characters long, and include at least one lowercase letter, one uppercase letter, one digit, and one symbol.";
+    }
+    return "Valid";
+  }
+
+
+  async function main(){
+    try{
+
+      let Validation = ValidationCheck(req.body);
+
+      if (Validation === "Valid") {
+        const FreelancersData = await Freelancers.findOne({Email:req.body.Email});
+        if (FreelancersData !== null) {
+          if (verifyPassword(req.body.Password, FreelancersData.Password)) {
+            res.status(200).json({status:200, success:true, message:"Login successful."});
+          }else{
+            res.status(200).json({status:200, success:false, message:"Wrong password."});
+          }
+        }else{
+          res.status(401).json({status:401, success:false, message:"You don't have an account with this email."});
+        }
+      }else{
+        res.status(200).json({status:200, success:false, message: Validation});
+      }
+    }catch {
+      res.status(500).json({status:500, success:false, message:"Unable to login, try again later."});
     };
   }
 
