@@ -21,6 +21,9 @@ freelancer.get("/", (req, res) => {
 
 
 
+freelancer.get("/signup", (req, res) => {
+  res.status(200).json({Message:"Signup page"});
+});
 
 //Freelancer Login
 freelancer.post("/signup", async (req, res) => {
@@ -106,6 +109,10 @@ freelancer.post("/signup", async (req, res) => {
 
 
 
+freelancer.get("/login", (req, res) => {
+  res.status(200).json({Message:"Login page"});
+});
+
 
 //Freelancer Login
 freelancer.post("/login", async (req, res) => {
@@ -149,3 +156,4 @@ freelancer.post("/login", async (req, res) => {
 
   main().catch();
 });
+
