@@ -5,13 +5,21 @@ const port=process.env.PORT
 const freelancer=require('./routes/freelancer')
 const clientRouter=require("./routes/client_acc");
 
+
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*"); // Allow all origins or specify your domain
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    next();
+});
+
 app.use(express.urlencoded({extended:false}))
 app.use(express.json())
 app.use('/freelancer',freelancer)
 app.use('/client', clientRouter);
 
 app.get('/',(req,res)=>{
-    res.status(200).json({status:"200",description:"success"})
+    res.status(404).json({status:"200",description:"success"})
 })
 
 app.listen(port,()=>{
