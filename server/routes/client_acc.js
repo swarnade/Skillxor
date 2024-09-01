@@ -101,3 +101,20 @@ clientRouter.post("/auth/login", async (req, res) => {
         messege: "Invalid username or password"
     })
 })
+
+clientRouter.post("/auth/delete", (req, res) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const id = decoded.id;
+    Clients.deleteOne({
+        _id: id
+    }).then(() => {
+        res.status(200).json({
+            messege: "account deleted"
+        })
+    }).catch(() => {
+        res.status(500).json({
+            messege: "Can not delete"
+        })
+    })
+})
