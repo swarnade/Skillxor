@@ -1,7 +1,7 @@
 const express = require("express");
 const  {Clients}  = require("../Models");
 const zod = require("zod");
-const {hashPassword} = require( "../Short_Hand/Password");
+const {hashPassword, verifyPassword} = require( "../Short_Hand/Password");
 const jwt = require("jsonwebtoken");
 
 const clientRouter = express.Router();
@@ -17,7 +17,7 @@ const signupObject = zod.object({
 })
 
 const signinObject = zod.object({
-    username: zod.string().email(),
+    email: zod.string().email(),
     password: zod.string().min(8)
 })
 
@@ -42,24 +42,29 @@ clientRouter.post("/auth/signup", async (req, res) => {
 
     const hashedPassword = await hashPassword(password);
 
-    const newClient = await Clients.create({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: hashedPassword,
-        mobileNumber: mobileNumber,
-        country: country
-    })
+    try {
+        const newClient = await Clients.create({
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: hashedPassword,
+            mobileNumber: mobileNumber,
+            country: country
+        })
+        const token = jwt.sign({
+            email: email,
+            id: newClient._id
+        }, process.env.JWT_SECRET)
 
-    const token = jwt.sign({
-        email: email,
-        id: newClient._id
-    }, process.env.JWT_SECRET)
-
-    return res.status(200).json({
-        message: "User created",
-        token: token
-    })
+        return res.status(200).json({
+            message: "User created",
+            token: token
+        })
+    } catch (err) {
+        return res.status(500).json({
+            message: "can not create user"
+        })
+    }
 });
 
 clientRouter.post("/auth/login", async (req, res) => {
@@ -71,11 +76,16 @@ clientRouter.post("/auth/login", async (req, res) => {
             messege: "Invalid inputs"
         })
     }
-
     const client = await Clients.findOne({
         email: email,
-        password: password
     })
+
+    const validPass = verifyPassword(password, client.password);
+    if (!validPass) {
+        return res.status(400).json({
+            messege: "Invalid username or password"
+        })
+    }
 
     if (client) {
         const token = jwt.sign({
@@ -87,7 +97,7 @@ clientRouter.post("/auth/login", async (req, res) => {
         })
     }
     
-    res.status(411).json({
+    res.status(400).json({
         messege: "Invalid username or password"
     })
 })

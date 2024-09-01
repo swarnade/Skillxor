@@ -21,12 +21,44 @@ const Freelancer = mongoose.Schema({
 });
 // Rest of the things will be added later
 const Client = mongoose.Schema({
-    firstName: {type:String},
-    lastName: {type:String},
-    Mobile_Number: {type:String},
-    Country: {type:String},
-    Email: {type:String},
-    Password: {type:String},
+    firstName: {
+        type: String,
+        maxLength: 30,
+        trim: true,
+        required: true
+    },
+    lastName: {
+        type: String,
+        maxLength: 30,
+        trim: true,
+        required: true
+    },
+    mobileNumber: {
+        type: String,
+        maxLength: 30,
+        trim: true,
+        required: true
+    },
+    country: {
+        type: String,
+        maxLength: 30,
+        trim: true,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true,
+        trim: true,
+        minLength: 3,
+        uniqe: true,
+        maxLength: 30,
+        lowercase: true
+    },
+    password: {
+        type: String,
+        required: true,
+        minLength: 8
+    },
 
 });
 
