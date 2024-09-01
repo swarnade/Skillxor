@@ -128,3 +128,11 @@ clientRouter.post("/delete", (req, res) => {
         })
     })
 })
+
+
+clientRouter.get("*", (req, res) => {
+    res.status(404).json({status:404, message:"Page not found error || 404 Error"});
+});
+clientRouter.post("*", (req, res) => {
+    res.status(404).json({status:404, message:"Page not found error || 404 Error"});
+});

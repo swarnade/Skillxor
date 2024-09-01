@@ -13,13 +13,45 @@ db.once('open',() => {
 
 // Freelancer Schema
 const Freelancer = mongoose.Schema({
-    _id: {type:String},
-    Name: {type:String},
-    Mobile_Number: {type:String},
-    Email: {type:String},
-    Password: {type:String},
+    _id: {
+        type:String,
+    },
+    Username: {
+        type:String,
+        
+        maxLength: 30,
+    },
+    Log: {
+        type:String,
+    },
+    Name: {
+        type:String,
+        required:true,
+    },
+    Mobile_Number: {
+        type:String,
+        required:true,
+    },
+    Email: {
+        type: String,
+        required: true,
+        trim: true,
+        lowercase: true
+    },
+    Password: {
+        type: String,
+        required: true,
+    },
 });
-// Rest of the things will be added later
+
+
+
+
+
+
+
+
+// Client Schema
 const Client = mongoose.Schema({
     firstName: {
         type: String,
@@ -50,7 +82,7 @@ const Client = mongoose.Schema({
         required: true,
         trim: true,
         minLength: 3,
-        uniqe: true,
+        unique: true,
         maxLength: 30,
         lowercase: true
     },
@@ -62,7 +94,7 @@ const Client = mongoose.Schema({
 
 });
 
-// Freelancer Model
+// All Models
 const Freelancers = mongoose.model('Users', Freelancer);
 const Clients = mongoose.model('Clients', Client);
 
