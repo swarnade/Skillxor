@@ -20,15 +20,10 @@ freelancer.get("/", (req, res) => {
 });
 
 
-
-freelancer.get("/signup", (req, res) => {
-  res.status(200).json({Message:"Signup page"});
-});
-
-//Freelancer Login
+//Freelancer Signup
 freelancer.post("/signup", async (req, res) => {
 
-
+  //Vadidation Check Function
   function ValidationCheck(body) {
     if(body.Name == "" || body.Name.length < 3 || body.Name == undefined){
       return "Enter a valid name";
@@ -52,7 +47,7 @@ freelancer.post("/signup", async (req, res) => {
   }
 
 
-  
+  //Main Function call f
   async function main(){
     try{
       let Validation = ValidationCheck(req.body);
@@ -106,14 +101,6 @@ freelancer.post("/signup", async (req, res) => {
 
 
 
-
-
-
-freelancer.get("/login", (req, res) => {
-  res.status(200).json({Message:"Login page"});
-});
-
-
 //Freelancer Login
 freelancer.post("/login", async (req, res) => {
 
@@ -156,4 +143,22 @@ freelancer.post("/login", async (req, res) => {
 
   main().catch();
 });
+
+
+//Freelancer All Profile
+freelancer.get('/allprofile',async(req,res)=>{
+  async function main()
+  {
+    try
+    {
+      const data=await Freelancers.find({})
+      res.status(200).json({status:"Success",profile:data})
+    }
+    catch
+    {
+      res.status(404).json({status:"Failed",profile:null})
+    }
+  } 
+  main().catch()
+})
 

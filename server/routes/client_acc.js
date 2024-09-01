@@ -21,7 +21,16 @@ const signinObject = zod.object({
     password: zod.string().min(8)
 })
 
-clientRouter.post("/auth/signup", async (req, res) => {
+
+clientRouter.get('/',async (req,res)=>{
+    res.status(200).json({
+        status: "200",
+        description: "success",
+        route: "Client Profile",
+      });
+})
+
+clientRouter.post("/signup", async (req, res) => {
     const { firstName, lastName, email, password, mobileNumber, country } = req.body;
 
     const {success} = signupObject.safeParse(req.body);
@@ -67,7 +76,7 @@ clientRouter.post("/auth/signup", async (req, res) => {
     }
 });
 
-clientRouter.post("/auth/login", async (req, res) => {
+clientRouter.post("/login", async (req, res) => {
     const { email, password } = req.body;
     const {success} = signinObject.safeParse(req.body);
 
@@ -93,6 +102,7 @@ clientRouter.post("/auth/login", async (req, res) => {
             id: client._id
         }, process.env.JWT_SECRET)
         return res.status(200).json({
+            status:"Success",
             token: token
         })
     }
@@ -102,7 +112,7 @@ clientRouter.post("/auth/login", async (req, res) => {
     })
 })
 
-clientRouter.post("/auth/delete", (req, res) => {
+clientRouter.post("/delete", (req, res) => {
     const token = req.headers.authorization.split(" ")[1];
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const id = decoded.id;
