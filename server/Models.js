@@ -20,11 +20,21 @@ const Freelancer = mongoose.Schema({
     Password: {type:String},
 });
 // Rest of the things will be added later
+const Client = mongoose.Schema({
+    firstName: {type:String},
+    lastName: {type:String},
+    Mobile_Number: {type:String},
+    Country: {type:String},
+    Email: {type:String},
+    Password: {type:String},
 
+});
 
 // Freelancer Model
 const Freelancers = mongoose.model('Users', Freelancer);
+const Clients = mongoose.model('Clients', Client);
 
 module.exports = {
     Freelancers:Freelancers,
+    Clients:Clients
 };

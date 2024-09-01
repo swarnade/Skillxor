@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "./config.js";
+
 
 export function authMiddleware (req, res, next) {
     const rawToken = req.headers.authorization;
@@ -13,7 +13,7 @@ export function authMiddleware (req, res, next) {
     const token = rawToken.split(" ")[1];
 
     try {
-        const verified = jwt.verify(token,JWT_SECRET);
+        const verified = jwt.verify(token, process.env.JWT_SECRET);
         if (verified.user_id) {
             req.user_id = verified.user_id;
         } else {
