@@ -1,5 +1,5 @@
 const express = require("express");
-const  {Clients}  = require("../Models");
+const  {Clients, Freelancers}  = require("../Models");
 const zod = require("zod");
 const {hashPassword, verifyPassword} = require( "../Short_Hand/Password");
 const jwt = require("jsonwebtoken");
@@ -46,6 +46,15 @@ clientRouter.post("/signup", async (req, res) => {
     if (alreadyExists) {
         return res.status(400).json({
             message: "User already exists"
+        })
+    }
+
+    const isFreelancer = await Freelancers.findOne({
+        email: email
+    })
+    if (isFreelancer) {
+        return res.status(400).json({
+            message: "User already exists as a freelancer"
         })
     }
 
