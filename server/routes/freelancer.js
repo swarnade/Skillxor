@@ -254,10 +254,11 @@ freelancer.post('/profile/:username/update',async(req,res)=>{
           let AA = await ValidationCheck(Name, Mobile_Number, Email , Password);
           if (AA === "Valid") {
 
-            
-            const data = await Freelancers.findOne({Username:Username});
 
-            if (data) {
+
+
+
+            if (data.Username == Username) {
 
               const Pass = await hashPassword(Password);
               await Freelancers.updateOne({
@@ -279,8 +280,42 @@ freelancer.post('/profile/:username/update',async(req,res)=>{
               
               
             }else{
-              res.status(404).json({status:"Failed",message: "Username already exist, try unique one."});
+                
+              const data1 = await Freelancers.findOne({Username:Username});
+
+              if (!data1) {
+
+                const Pass = await hashPassword(Password);
+                await Freelancers.updateOne({
+                  _id: data._id
+                },
+                {$set:{
+                    Username:Username,
+                    Name:Name, 
+                    Mobile_Number:Mobile_Number, 
+                    Email:Email, 
+                    Password:Pass, 
+                  }
+                }
+                ).then(()=>{
+                  res.status(200).json({status:"Success",message: "Updated successfully"});
+                }).catch(()=>{
+                  res.status(404).json({status:"Failed",message: "Unable to update the profile, try again later."});
+                });
+                
+                
+              }else{
+                res.status(404).json({status:"Failed",message: "Username already exist, try unique one."});
+              }
+
             }
+            
+
+
+
+
+
+
           }else{
             res.status(404).json({status:"Failed",message: AA});
           };
