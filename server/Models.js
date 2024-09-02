@@ -18,7 +18,6 @@ const Freelancer = mongoose.Schema({
     },
     Username: {
         type:String,
-        
         maxLength: 30,
     },
     Log: {

@@ -116,16 +116,6 @@ freelancer.post("/signup", async (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
 //Freelancer Login
 freelancer.post("/login", async (req, res) => {
 
@@ -196,7 +186,7 @@ freelancer.get('/allprofiles',async(req,res)=>{
 })
 
 
-// specific freelancer profile
+// Authorized access of account - Profile
 freelancer.post('/profile/:username',async(req,res)=>{
   async function main()
   {
@@ -225,6 +215,86 @@ freelancer.post('/profile/:username',async(req,res)=>{
     catch
     {
       res.status(404).json({status:"Failed",Profile:null})
+    }
+  } 
+  main().catch()
+})
+
+
+// Authorized access of account - Add gig 
+freelancer.post('/profile/:username/update',async(req,res)=>{
+  async function main()
+  {
+    try
+    {
+      let Valid = await Auth(req.body.Token);
+      if (Valid) {
+        
+        const Profile_Of = req.params.username;
+        const data = await Freelancers.findOne({Username:Profile_Of});
+        if (data) {
+          const {Name, Mobile_Number, Email, Password, Username} = req.body;
+          
+          function ValidationCheck(Name, Mobile_Number, Email , Password) {
+            if(Name == "" || body.Name.length < 3 || Name == undefined){
+              return "Enter a valid name";
+            }
+            if(Mobile_Number == undefined || !ValidMobile(Mobile_Number) ){
+              return "Enter a valid mobile number";
+            }
+            if(Email == undefined || !ValidMail(Email) ){
+              return "Enter a valid email";
+            }
+            if(Password == undefined || !ValidPassword(Password) ){
+              return "Password must be at least 8 characters long, and include at least one lowercase letter, one uppercase letter, one digit, and one symbol.";
+            }
+            return "Valid";
+          }
+
+          let AA = await ValidationCheck(Name, Mobile_Number, Email , Password);
+          if (AA === "Valid") {
+
+            
+            const data = await Freelancers.findOne({Username:Username});
+
+            if (data) {
+
+              const Pass = await hashPassword(Password);
+              await Freelancers.updateOne({
+                _id: data._id
+              },
+              {$set:{
+                  Username:Username,
+                  Name:Name, 
+                  Mobile_Number:Mobile_Number, 
+                  Email:Email, 
+                  Password:Pass, 
+                }
+              }
+              ).then(()=>{
+                res.status(200).json({status:"Success",message: "Updated successfully"});
+              }).catch(()=>{
+                res.status(404).json({status:"Failed",message: "Unable to update the profile, try again later."});
+              });
+              
+              
+            }else{
+              res.status(404).json({status:"Failed",message: "Username already exist, try unique one."});
+            }
+          }else{
+            res.status(404).json({status:"Failed",message: AA});
+          };
+        }else{
+          res.status(404).json({status:"Failed",message: "You don't have an account with this username."});
+          
+        };
+      }else{
+        res.status(404).json({status:"Failed",message:"You don't have the access, please login and try again."})
+      }
+    }
+    catch
+    {
+      res.status(404).json({status:"Failed",message:"Internal server error"});
     }
   } 
   main().catch()

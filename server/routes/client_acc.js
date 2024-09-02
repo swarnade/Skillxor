@@ -167,7 +167,7 @@ clientRouter.get("/profile",verifyToken, async (req, res) => {
         status: "Failed",
         profile: null
     })
-})
+});
 
 // edit profile
 clientRouter.put("/profile", verifyToken, async (req, res) => {
