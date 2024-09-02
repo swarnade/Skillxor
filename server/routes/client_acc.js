@@ -122,10 +122,8 @@ clientRouter.post("/login", async (req, res) => {
     })
 })
 
-clientRouter.post("/delete", (req, res) => {
-    const token = req.headers.authorization;
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const id = decoded.id;
+clientRouter.post("/delete", verifyToken, (req, res) => {
+    const id = req.id;
     Clients.deleteOne({
         _id: id
     }).then(() => {
@@ -172,10 +170,8 @@ clientRouter.get("/profile",verifyToken, async (req, res) => {
 })
 
 // edit profile
-clientRouter.put("/profile", async (req, res) => {
-    const token = req.headers.authorization;
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const id = decoded.id;
+clientRouter.put("/profile", verifyToken, async (req, res) => {
+    const id = req.id;
     const client = await Clients.findOne({
         _id: id
     })
