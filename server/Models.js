@@ -91,14 +91,60 @@ const Client = mongoose.Schema({
         required: true,
         minLength: 8
     },
-
+    bio: {
+        type: String,
+        maxLength: 200
+    },
+    profilePicture: {
+        type: String
+    },
+    projects: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Project'
+    }]
 });
+
+const Project = mongoose.Schema({
+    client: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Client',
+        required: true
+    },
+    title: {
+        title: String,
+        required: true,
+        maxLength: 50
+    },
+    description: {
+        type: String,
+        required: true,
+    },
+    deadline: {
+        type: Date,
+        required: true
+    },
+    budget: {
+        type: Number,
+        required: true
+    },
+    status: {
+        type: String, 
+        enum: ['open', 'in_progress', 'completed', 'cancelled'], 
+        default: 'open'
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+})
 
 // All Models
 const Freelancers = mongoose.model('Users', Freelancer);
 const Clients = mongoose.model('Clients', Client);
+const Projects = mongoose.model('Projects', Project);
 
 module.exports = {
     Freelancers:Freelancers,
-    Clients:Clients
+    Clients:Clients,
+    Projects:Projects
 };

@@ -122,7 +122,7 @@ clientRouter.post("/login", async (req, res) => {
 })
 
 clientRouter.post("/delete", (req, res) => {
-    const token = req.headers.authorization.split(" ")[1];
+    const token = req.headers.authorization;
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const id = decoded.id;
     Clients.deleteOne({
@@ -149,6 +149,53 @@ clientRouter.get("/allprofiles", async (req, res) => {
         res.status(404).json({
             status: "Failed",
             profile: null
+        })
+    }
+})
+
+// profile management
+// get specific profile
+clientRouter.get("/profile", async (req, res) => {
+    const token = req.headers.authorization;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const id = decoded.id;
+    const client = await Clients.findOne({
+        _id: id
+    })
+    if (client) {
+        return res.status(200).json({
+            status: "Success",
+            profile: client
+        })
+    }
+    res.status(404).json({
+        status: "Failed",
+        profile: null
+    })
+})
+
+// edit profile
+clientRouter.put("/profile", async (req, res) => {
+    const token = req.headers.authorization;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const id = decoded.id;
+    const client = await Clients.findOne({
+        _id: id
+    })
+    if (client) {
+        const { bio, country, firstName, lastName, profilePicture } = req.body;
+        await Clients.updateOne({
+            _id: id
+        }, {
+            firstName: firstName,
+            lastName: lastName,
+            bio: bio,
+            profilePicture: profilePicture,
+            country: country
+        })
+        return res.status(200).json({
+            status: "Profile updated",
+            profile: client
         })
     }
 })
