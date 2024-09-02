@@ -22,16 +22,8 @@ freelancer.get("/", (req, res) => {
   });
 });
 
-
-
-
-
-
-
-
-
-
-
+// --------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------
 
 //Freelancer Signup
 freelancer.post("/signup", async (req, res) => {
@@ -115,6 +107,9 @@ freelancer.post("/signup", async (req, res) => {
 });
 
 
+// --------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------
+
 
 //Freelancer Login
 freelancer.post("/login", async (req, res) => {
@@ -168,6 +163,9 @@ freelancer.post("/login", async (req, res) => {
 });
 
 
+// --------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------
+
 //Freelancer All Profile
 freelancer.get('/allprofiles',async(req,res)=>{
   async function main()
@@ -184,6 +182,9 @@ freelancer.get('/allprofiles',async(req,res)=>{
   } 
   main().catch()
 })
+
+// --------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------
 
 
 // Authorized access of account - Profile
@@ -221,6 +222,9 @@ freelancer.post('/profile/:username',async(req,res)=>{
 })
 
 
+// --------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------
+
 // Authorized access of account - Add gig 
 freelancer.post('/profile/:username/update',async(req,res)=>{
   async function main()
@@ -251,40 +255,14 @@ freelancer.post('/profile/:username/update',async(req,res)=>{
             return "Valid";
           }
 
-          let AA = await ValidationCheck(Name, Mobile_Number, Email , Password);
+          let AA = ValidationCheck(Name, Mobile_Number, Email , Password);
           if (AA === "Valid") {
-
-
-
-
+            
+            
 
             if (data.Username == Username) {
-
-              const Pass = await hashPassword(Password);
-              await Freelancers.updateOne({
-                _id: data._id
-              },
-              {$set:{
-                  Username:Username,
-                  Name:Name, 
-                  Mobile_Number:Mobile_Number, 
-                  Email:Email, 
-                  Password:Pass, 
-                }
-              }
-              ).then(()=>{
-                res.status(200).json({status:"Success",message: "Updated successfully"});
-              }).catch(()=>{
-                res.status(404).json({status:"Failed",message: "Unable to update the profile, try again later."});
-              });
-              
-              
-            }else{
+              if (data.Email == Email) {
                 
-              const data1 = await Freelancers.findOne({Username:Username});
-
-              if (!data1) {
-
                 const Pass = await hashPassword(Password);
                 await Freelancers.updateOne({
                   _id: data._id
@@ -302,26 +280,98 @@ freelancer.post('/profile/:username/update',async(req,res)=>{
                 }).catch(()=>{
                   res.status(404).json({status:"Failed",message: "Unable to update the profile, try again later."});
                 });
-                
-                
+
               }else{
-                res.status(404).json({status:"Failed",message: "Username already exist, try unique one."});
+                
+                const dataEmail = await Freelancers.findOne({Email:Email});
+
+                if (!dataEmail) {
+                  
+                  const Pass = await hashPassword(Password);
+                  await Freelancers.updateOne({
+                    _id: data._id
+                  },
+                  {$set:{
+                      Username:Username,
+                      Name:Name, 
+                      Mobile_Number:Mobile_Number, 
+                      Email:Email, 
+                      Password:Pass, 
+                    }
+                  }
+                  ).then(()=>{
+                    res.status(200).json({status:"Success",message: "Updated successfully"});
+                  }).catch(()=>{
+                    res.status(404).json({status:"Failed",message: "Unable to update the profile, try again later."});
+                  });
+                  
+                  
+                }else{
+                  res.status(404).json({status:"Failed",message: "Email already exist, try unique one."});
+
+                }
               }
 
+
+
+            }else{
+
+              if (data.Email == Email) {
+  
+                const data1 = await Freelancers.findOne({Username:Username});
+                if (!data1) {
+                  const Pass = await hashPassword(Password);
+                  await Freelancers.updateOne({
+                    _id: data._id
+                  },
+                  {$set:{
+                      Username:Username,
+                      Name:Name, 
+                      Mobile_Number:Mobile_Number, 
+                      Email:Email, 
+                      Password:Pass, 
+                    }
+                  }
+                  ).then(()=>{
+                    res.status(200).json({status:"Success",message: "Updated successfully"});
+                  }).catch(()=>{
+                    res.status(404).json({status:"Failed",message: "Unable to update the profile, try again later."});
+                  });
+                }else{
+                  res.status(404).json({status:"Failed",message: "Username already exist, try unique one."});
+                }
+              }else{
+                
+                const dataEmail = await Freelancers.findOne({Email:Email});
+
+                if (!dataEmail) {
+                  const Pass = await hashPassword(Password);
+                  await Freelancers.updateOne({
+                    _id: data._id
+                  },
+                  {$set:{
+                      Username:Username,
+                      Name:Name, 
+                      Mobile_Number:Mobile_Number, 
+                      Email:Email, 
+                      Password:Pass, 
+                    }
+                  }
+                  ).then(()=>{
+                    res.status(200).json({status:"Success",message: "Updated successfully"});
+                  }).catch(()=>{
+                    res.status(404).json({status:"Failed",message: "Unable to update the profile, try again later."});
+                  });
+                }else{
+                  res.status(404).json({status:"Failed",message: "Email already exist, try unique one."});
+                }
+              }
             }
-            
-
-
-
-
-
-
           }else{
             res.status(404).json({status:"Failed",message: AA});
           };
         }else{
           res.status(404).json({status:"Failed",message: "You don't have an account with this username."});
-          
         };
       }else{
         res.status(404).json({status:"Failed",message:"You don't have the access, please login and try again."})
@@ -329,13 +379,14 @@ freelancer.post('/profile/:username/update',async(req,res)=>{
     }
     catch (R)
     {
-      console.log(R)
       res.status(404).json({status:"Failed",message:"Internal server error"});
     }
   } 
   main().catch()
 })
 
+// --------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------
 
 
 freelancer.get("*", (req, res) => {
