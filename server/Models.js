@@ -100,24 +100,24 @@ const Client = mongoose.Schema({
     },
     projects: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Project'
+        ref: 'Projects'
     }]
 });
 
-const Project = mongoose.Schema({
+const ProjectSchema = mongoose.Schema({
     client: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Client',
+        ref: 'Clients',
         required: true
     },
     title: {
-        title: String,
+        type: String,
         required: true,
         maxLength: 50
     },
     description: {
         type: String,
-        required: true,
+        required: true
     },
     deadline: {
         type: Date,
@@ -141,7 +141,7 @@ const Project = mongoose.Schema({
 // All Models
 const Freelancers = mongoose.model('Users', Freelancer);
 const Clients = mongoose.model('Clients', Client);
-const Projects = mongoose.model('Projects', Project);
+const Projects = mongoose.model('Projects', ProjectSchema);
 
 module.exports = {
     Freelancers:Freelancers,

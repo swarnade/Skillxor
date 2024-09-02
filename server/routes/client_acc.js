@@ -1,8 +1,9 @@
 const express = require("express");
-const  {Clients, Freelancers}  = require("../Models");
+const  {Clients, Freelancers, Projects}  = require("../Models");
 const zod = require("zod");
 const {hashPassword, verifyPassword} = require( "../Short_Hand/Password");
 const jwt = require("jsonwebtoken");
+const verifyToken = require("./verifyToken");
 
 const clientRouter = express.Router();
 module.exports = clientRouter;
@@ -155,13 +156,9 @@ clientRouter.get("/allprofiles", async (req, res) => {
 
 // profile management
 // get specific profile
-clientRouter.get("/profile", async (req, res) => {
-    const token = req.headers.authorization;
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const id = decoded.id;
-    const client = await Clients.findOne({
-        _id: id
-    })
+clientRouter.get("/profile",verifyToken, async (req, res) => {
+    const id = req.id;
+    const client = await Clients.findById(id).populate("projects").exec();
     if (client) {
         return res.status(200).json({
             status: "Success",
@@ -198,6 +195,44 @@ clientRouter.put("/profile", async (req, res) => {
             profile: client
         })
     }
+})
+
+// projects
+
+// create project
+clientRouter.post("/project/create", verifyToken, async (req, res) => {
+    const id = req.id;
+    const client = await Clients.findOne({
+        _id: id
+    })
+    if (client) {
+        const { title, description, budget, deadline } = req.body;
+        const newProject = new Projects({
+            client: id,
+            title: title,
+            description: description,
+            budget: budget,
+            deadline: deadline
+        })
+
+        await newProject.save();
+
+        await Clients.updateOne({
+            _id: id
+        }, {
+            $push: {
+                projects: newProject._id
+            }
+        })
+        return res.status(200).json({
+            status: "Project created",
+            project: newProject
+        })
+    }
+    res.status(404).json({
+        status: "Failed",
+        project: null
+    })
 })
 
 clientRouter.get("*", (req, res) => {
