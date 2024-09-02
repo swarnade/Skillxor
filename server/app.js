@@ -26,14 +26,6 @@ app.get('/',(req,res)=>{
 
 
 
-
-app.get("*", (req, res) => {
-    res.status(404).json({status:404, message:"Page not found error || 404 Error"});
-});
-app.post("*", (req, res) => {
-    res.status(404).json({status:404, message:"Page not found error || 404 Error"});
-});
-
 app.listen(port,()=>{
     console.log("Server Is Running")
 })

@@ -7,6 +7,7 @@ const Generate_Token = require("../Short_Hand/Random_Token");
 const ValidPassword = require("../Short_Hand/ValidPassword");
 const ValidMobile = require("../Short_Hand/ValidMobile");
 const Profile_ID = require("../Short_Hand/Profile_ID");
+const Auth = require("./Freelancer/freelancerAuthentication");
 
 const {hashPassword, verifyPassword} = require("../Short_Hand/Password");
 const { createToken } = require("../Short_Hand/JWT");
@@ -201,15 +202,23 @@ freelancer.post('/profile/:username',async(req,res)=>{
   {
     try
     {
-      const Profile_Of = req.params.username;
-      const data = await Freelancers.findOne({Username:Profile_Of});
-      if (data) {
-
-        res.status(200).json({status:"Success",Profile:data})
+      let Valid = await Auth(req.body.Token);
+      if (Valid) {
         
+        const Profile_Of = req.params.username;
+        const data = await Freelancers.findOne({Username:Profile_Of});
+        if (data) {
+          
+          res.status(200).json({status:"Success",Profile:data})
+          
+        }else{
+          
+          res.status(404).json({status:"Failed",Profile:null})
+        
+        }
       }else{
         
-        res.status(404).json({status:"Failed",Profile:null})
+        res.status(404).json({status:"Failed",message:"You don't have the access, please login and try again.",Profile:null})
       }
 
     }
@@ -220,6 +229,8 @@ freelancer.post('/profile/:username',async(req,res)=>{
   } 
   main().catch()
 })
+
+
 
 freelancer.get("*", (req, res) => {
   res.status(404).json({status:404, message:"Page not found error || 404 Error"});
