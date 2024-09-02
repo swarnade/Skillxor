@@ -56,7 +56,7 @@ export const Signup = () => {
               onClick={async () => {
                 //put in the url to hit post for signup
                 axios.post(
-                  "http://127.0.0.1:1234/freelancer/signup",
+                  "http://localhost:1234/freelancer/signup",
                   {
                     Name: name,
                     Mobile_Number: mobileNumber,
@@ -87,7 +87,7 @@ export const Signup = () => {
           <BottomWarning
             label={"Already have an account?"}
             buttonText={"Sign in"}
-            to={"/signin"}
+            to={"/login"}
           />
         </div>
       </div>
