@@ -4,6 +4,7 @@ const app=express()
 const port=process.env.PORT
 const freelancer=require('./routes/freelancer')
 const clientRouter=require("./routes/client_acc");
+const projectsRouter=require("./routes/projects");
 
 
 app.use((req, res, next) => {
@@ -17,6 +18,7 @@ app.use(express.urlencoded({extended:false}))
 app.use(express.json())
 app.use('/freelancer',freelancer)
 app.use('/client', clientRouter);
+app.use('/projects', projectsRouter);
 
 app.get('/',(req,res)=>{
     res.status(404).json({status:"200",description:"success"})
