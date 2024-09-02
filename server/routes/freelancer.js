@@ -236,7 +236,7 @@ freelancer.post('/profile/:username/update',async(req,res)=>{
           const {Name, Mobile_Number, Email, Password, Username} = req.body;
           
           function ValidationCheck(Name, Mobile_Number, Email , Password) {
-            if(Name == "" || body.Name.length < 3 || Name == undefined){
+            if(Name == "" || Name.length < 3 || Name == undefined){
               return "Enter a valid name";
             }
             if(Mobile_Number == undefined || !ValidMobile(Mobile_Number) ){
@@ -292,8 +292,9 @@ freelancer.post('/profile/:username/update',async(req,res)=>{
         res.status(404).json({status:"Failed",message:"You don't have the access, please login and try again."})
       }
     }
-    catch
+    catch (R)
     {
+      console.log(R)
       res.status(404).json({status:"Failed",message:"Internal server error"});
     }
   } 
