@@ -129,6 +129,20 @@ clientRouter.post("/delete", (req, res) => {
     })
 })
 
+clientRouter.get("/allprofiles", async (req, res) => {
+    try {
+        const data = await Clients.find({})
+        res.status(200).json({
+            status: "Success",
+            profile: data
+        })
+    } catch {
+        res.status(404).json({
+            status: "Failed",
+            profile: null
+        })
+    }
+})
 
 clientRouter.get("*", (req, res) => {
     res.status(404).json({status:404, message:"Page not found error || 404 Error"});
