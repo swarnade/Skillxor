@@ -41,6 +41,14 @@ const Freelancer = mongoose.Schema({
         type: String,
         required: true,
     },
+    Bio: {
+        type: String,
+        default:"",
+    },
+    Country: {
+        type: String,
+        default:"India",
+    },
 });
 
 

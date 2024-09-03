@@ -70,9 +70,8 @@ freelancer.post("/signup", async (req, res) => {
         }
 
         const FreelancersData = await Freelancers.findOne({Email:req.body.Email});
-        const ClientsData = await Clients.findOne({Email:req.body.Email});
 
-        if (!FreelancersData && !ClientsData) {
+        if (!FreelancersData) {
           
           const Pass = await hashPassword(req.body.Create_Password);
           
@@ -142,8 +141,9 @@ freelancer.post("/login", async (req, res) => {
                 message:"Login successful.", 
                 Token: createToken({profileID: FreelancersData._id,Log: Log_Token})
               });
-            }).catch(()=>{
-              res.status(500).json({status:500, success:false, message:"Unable to login, try again later."});
+            }).catch(e=>{
+              console.log(e);
+              res.status(500).json({status:500, success:false, message:"Unable to login, try again later.1"});
             });
           }else{
             res.status(404).json({status:404, success:false, message:"Wrong password."});
@@ -154,8 +154,9 @@ freelancer.post("/login", async (req, res) => {
       }else{
         res.status(404).json({status:404, success:false, message: Validation});
       }
-    }catch {
-      res.status(500).json({status:500, success:false, message:"Unable to login, try again later."});
+    }catch (e) {
+      console.log(e);
+      res.status(500).json({status:500, success:false, message:"Unable to login, try again later.2"});
     };
   }
 
@@ -226,7 +227,7 @@ freelancer.post('/profile/:username',async(req,res)=>{
 // --------------------------------------------------------------------------------------
 
 // Authorized access of account - Add gig 
-freelancer.post('/profile/:username/update',async(req,res)=>{
+freelancer.put('/profile/:username/update',async(req,res)=>{
   async function main()
   {
     try
