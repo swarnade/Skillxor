@@ -1,5 +1,6 @@
 require('dotenv').config();
 const mongoose = require("mongoose");
+const { object } = require('zod');
 const URL = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@${process.env.MONGO_SERVER}/SIH2024?retryWrites=true&w=majority&appName=SSP`;
 mongoose.connect(URL);
 const db = mongoose.connection;
@@ -49,6 +50,12 @@ const Freelancer = mongoose.Schema({
         type: String,
         default:"India",
     },
+    createdAt: {
+        type: Date,
+    },
+    gig:{
+        type:Object
+    }
 });
 
 

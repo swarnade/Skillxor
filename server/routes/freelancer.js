@@ -9,7 +9,7 @@ const ValidMobile = require("../Short_Hand/ValidMobile");
 const Profile_ID = require("../Short_Hand/Profile_ID");
 const Auth = require("./Freelancer/freelancerAuthentication");
 
-const {hashPassword, verifyPassword} = require("../Short_Hand/Password");
+const { hashPassword, verifyPassword } = require("../Short_Hand/Password");
 const { createToken } = require("../Short_Hand/JWT");
 const { Freelancers, Clients } = require("../Models");
 
@@ -24,7 +24,6 @@ freelancer.get("/", (req, res) => {
 
 // --------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
-
 //Freelancer Signup
 freelancer.post("/signup", async (req, res) => {
 
@@ -83,6 +82,10 @@ freelancer.post("/signup", async (req, res) => {
             Email: req.body.Email,
             Password: Pass,
             Log:"",
+            Country:"India",
+            Bio:"",
+            createdAt:Date(),
+            gig:[]
           };
             
           const DataSave = Freelancers(DataInsert);
@@ -108,8 +111,6 @@ freelancer.post("/signup", async (req, res) => {
 
 // --------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
-
-
 //Freelancer Login
 freelancer.post("/login", async (req, res) => {
 
@@ -141,8 +142,7 @@ freelancer.post("/login", async (req, res) => {
                 message:"Login successful.", 
                 Token: createToken({profileID: FreelancersData._id,Log: Log_Token})
               });
-            }).catch(e=>{
-              console.log(e);
+            }).catch(()=>{
               res.status(500).json({status:500, success:false, message:"Unable to login, try again later.1"});
             });
           }else{
@@ -154,8 +154,7 @@ freelancer.post("/login", async (req, res) => {
       }else{
         res.status(404).json({status:404, success:false, message: Validation});
       }
-    }catch (e) {
-      console.log(e);
+    }catch {
       res.status(500).json({status:500, success:false, message:"Unable to login, try again later.2"});
     };
   }
@@ -166,7 +165,6 @@ freelancer.post("/login", async (req, res) => {
 
 // --------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
-
 //Freelancer All Profile
 freelancer.get('/allprofiles',async(req,res)=>{
   async function main()
@@ -186,94 +184,89 @@ freelancer.get('/allprofiles',async(req,res)=>{
 
 // --------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
-
-
 // Authorized access of account - Profile
-freelancer.post('/profile/:username',async(req,res)=>{
+freelancer.get('/profile',async(req,res)=>{
   async function main()
   {
-    try
-    {
-      let Valid = await Auth(req.body.Token);
-      if (Valid) {
-        
-        const Profile_Of = req.params.username;
-        const data = await Freelancers.findOne({Username:Profile_Of});
-        if (data) {
-          
-          res.status(200).json({status:"Success",Profile:data})
-          
-        }else{
-          
-          res.status(404).json({status:"Failed",Profile:null})
-        
-        }
+    try {
+      let User = await Auth(req.body.Token);
+      if (User) {
+        res.status(200).json({status:"Success",Profile:User})
       }else{
-        
         res.status(404).json({status:"Failed",message:"You don't have the access, please login and try again.",Profile:null})
-      }
-
-    }
-    catch
-    {
-      res.status(404).json({status:"Failed",Profile:null})
-    }
-  } 
+      };
+    } catch {
+      res.status(500).json({status:"Failed",Profile:null})
+    };
+  };
   main().catch()
 })
 
 
 // --------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
-
 // Authorized access of account - Add gig 
-freelancer.put('/profile/:username/update',async(req,res)=>{
+freelancer.put('/profile/update',async(req,res)=>{
   async function main()
   {
     try
     {
-      let Valid = await Auth(req.body.Token);
-      if (Valid) {
+      let User = await Auth(req.body.Token);
+      if (User) {
         
-        const Profile_Of = req.params.username;
-        const data = await Freelancers.findOne({Username:Profile_Of});
-        if (data) {
-          const {Name, Mobile_Number, Email, Password, Username} = req.body;
-          
-          function ValidationCheck(Name, Mobile_Number, Email , Password) {
-            if(Name == "" || Name.length < 3 || Name == undefined){
-              return "Enter a valid name";
-            }
-            if(Mobile_Number == undefined || !ValidMobile(Mobile_Number) ){
-              return "Enter a valid mobile number";
-            }
-            if(Email == undefined || !ValidMail(Email) ){
-              return "Enter a valid email";
-            }
-            if(Password == undefined || !ValidPassword(Password) ){
-              return "Password must be at least 8 characters long, and include at least one lowercase letter, one uppercase letter, one digit, and one symbol.";
-            }
-            return "Valid";
+        const {Name, Mobile_Number, Bio, Country, Username} = req.body;
+        function ValidationCheck(Name, Mobile_Number , Bio, Country) {
+          if(Name == "" || Name.length < 3 || Name == undefined){
+            return "Enter a valid name";
           }
+          if(Mobile_Number == undefined || !ValidMobile(Mobile_Number) ){
+            return "Enter a valid mobile number";
+          }
+          if(Bio == undefined || Bio.length < 2){
+            return "Enter atleast 2 words in bio";
+          }
+          if(Country == undefined || Country.length < 3 ){
+            return "Enter a valid country";
+          }
+          return "Valid";
+        }
 
-          let AA = ValidationCheck(Name, Mobile_Number, Email , Password);
-          if (AA === "Valid") {
-            
-            
+        let AA = ValidationCheck(Name, Mobile_Number, Bio, Country);
+        if (AA === "Valid") {
+          
+          
 
-            if (data.Username == Username) {
-              if (data.Email == Email) {
-                
-                const Pass = await hashPassword(Password);
-                await Freelancers.updateOne({
-                  _id: data._id
+          if (User.Username == Username) {
+              await Freelancers.updateOne(
+                {
+                  _id: User._id
                 },
-                {$set:{
-                    Username:Username,
+                {
+                  $set:{
                     Name:Name, 
-                    Mobile_Number:Mobile_Number, 
-                    Email:Email, 
-                    Password:Pass, 
+                    Mobile_Number:Mobile_Number,
+                    Bio:Bio,
+                    Country:Country,
+                  }
+                }
+              ).then(()=>{
+                res.status(200).json({status:"Success",message: "Updated successfully"});
+              }).catch(()=>{
+                res.status(404).json({status:"Failed",message: "Unable to update the profile, try again later."});
+              });
+          }else{
+              const data1 = await Freelancers.findOne({Username:Username});
+              if (!data1) {
+                await Freelancers.updateOne({
+                  _id: User._id
+                },
+                {
+                  $set:{
+                    Name:Name, 
+                    Username:Username,
+                    Mobile_Number:Mobile_Number,
+                    Bio:Bio,
+                    Country:Country,
                   }
                 }
                 ).then(()=>{
@@ -281,101 +274,17 @@ freelancer.put('/profile/:username/update',async(req,res)=>{
                 }).catch(()=>{
                   res.status(404).json({status:"Failed",message: "Unable to update the profile, try again later."});
                 });
-
               }else{
-                
-                const dataEmail = await Freelancers.findOne({Email:Email});
-
-                if (!dataEmail) {
-                  
-                  const Pass = await hashPassword(Password);
-                  await Freelancers.updateOne({
-                    _id: data._id
-                  },
-                  {$set:{
-                      Username:Username,
-                      Name:Name, 
-                      Mobile_Number:Mobile_Number, 
-                      Email:Email, 
-                      Password:Pass, 
-                    }
-                  }
-                  ).then(()=>{
-                    res.status(200).json({status:"Success",message: "Updated successfully"});
-                  }).catch(()=>{
-                    res.status(404).json({status:"Failed",message: "Unable to update the profile, try again later."});
-                  });
-                  
-                  
-                }else{
-                  res.status(404).json({status:"Failed",message: "Email already exist, try unique one."});
-
-                }
+                res.status(404).json({status:"Failed",message: "Username already exist, try unique one."});
               }
-
-
-
-            }else{
-
-              if (data.Email == Email) {
-  
-                const data1 = await Freelancers.findOne({Username:Username});
-                if (!data1) {
-                  const Pass = await hashPassword(Password);
-                  await Freelancers.updateOne({
-                    _id: data._id
-                  },
-                  {$set:{
-                      Username:Username,
-                      Name:Name, 
-                      Mobile_Number:Mobile_Number, 
-                      Email:Email, 
-                      Password:Pass, 
-                    }
-                  }
-                  ).then(()=>{
-                    res.status(200).json({status:"Success",message: "Updated successfully"});
-                  }).catch(()=>{
-                    res.status(404).json({status:"Failed",message: "Unable to update the profile, try again later."});
-                  });
-                }else{
-                  res.status(404).json({status:"Failed",message: "Username already exist, try unique one."});
-                }
-              }else{
-                
-                const dataEmail = await Freelancers.findOne({Email:Email});
-
-                if (!dataEmail) {
-                  const Pass = await hashPassword(Password);
-                  await Freelancers.updateOne({
-                    _id: data._id
-                  },
-                  {$set:{
-                      Username:Username,
-                      Name:Name, 
-                      Mobile_Number:Mobile_Number, 
-                      Email:Email, 
-                      Password:Pass, 
-                    }
-                  }
-                  ).then(()=>{
-                    res.status(200).json({status:"Success",message: "Updated successfully"});
-                  }).catch(()=>{
-                    res.status(404).json({status:"Failed",message: "Unable to update the profile, try again later."});
-                  });
-                }else{
-                  res.status(404).json({status:"Failed",message: "Email already exist, try unique one."});
-                }
-              }
-            }
-          }else{
-            res.status(404).json({status:"Failed",message: AA});
-          };
+            
+          }
         }else{
-          res.status(404).json({status:"Failed",message: "You don't have an account with this username."});
+          res.status(404).json({status:"Failed",message: AA});
         };
+        
       }else{
-        res.status(404).json({status:"Failed",message:"You don't have the access, please login and try again."})
+        res.status(404).json({status:"Failed",message:"Please login and try again later."})
       }
     }
     catch (R)
@@ -394,5 +303,8 @@ freelancer.get("*", (req, res) => {
   res.status(404).json({status:404, message:"Page not found error || 404 Error"});
 });
 freelancer.post("*", (req, res) => {
+  res.status(404).json({status:404, message:"Page not found error || 404 Error"});
+});
+freelancer.put("*", (req, res) => {
   res.status(404).json({status:404, message:"Page not found error || 404 Error"});
 });
