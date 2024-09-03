@@ -44,20 +44,21 @@ export const Login = () => {
                       Password: password,
                     }
                   ).then((response)=>{
+                    // console.log(response.data)
+                    localStorage.setItem("Token", response.data.Token);
+                    // console.log(response.data.Token)
+                    setEmail("");
+                    setPassword("");
 
-                 
-                  setEmail("");
-                  setPassword("");
+                    navigate("/dashboard");  //dashboard is to be created....
+                    alert("Login Successfully Done");
 
-                  
-                  navigate("/dashboard");
-                  alert("Login Successfully Done");
-                }).catch ((error)=> {
-                  console.log(error);
-                  alert("Login Failed");
-                })
+                  }).catch ((error)=> {
+                    console.log(error);
+                    alert("Login Failed");
+                  })
 
-                localStorage.setItem("token", response.data.token);
+              //  localStorage.setItem("token", response.data.token);  placed this inside .then block
 
               }}
               label={"Login"}
