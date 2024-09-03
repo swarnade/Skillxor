@@ -71,7 +71,7 @@ export const Signup = () => {
                   setName("");
                   console.log(response);
                   alert("Signup Sucessfully Done");
-                  navigate("/test")
+                  navigate("/login")
                 }).catch((error)=>{
                   console.log(error);
                 })
