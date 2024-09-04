@@ -46,12 +46,19 @@ const Freelancer = mongoose.Schema({
         type: String,
         default:"",
     },
+    Profile_Picture: {
+        type: String,
+        default:"",
+    },
     Country: {
         type: String,
         default:"India",
     },
     createdAt: {
         type: Date,
+    },
+    Skills:{
+        type:Object
     },
     gig:{
         type:Object
@@ -150,8 +157,11 @@ const ProjectSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     }
-})
+});
 
+const gig = mongoose.Schema({
+    
+});
 // All Models
 const Freelancers = mongoose.model('Users', Freelancer);
 const Clients = mongoose.model('Clients', Client);

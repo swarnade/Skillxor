@@ -13,7 +13,7 @@ app.use((req, res, next) => {
     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
     next();
 });
-
+app.use("/files", express.static("./Freelancer_Images"));
 app.use(express.urlencoded({extended:false}))
 app.use(express.json())
 app.use('/freelancer',freelancer)
