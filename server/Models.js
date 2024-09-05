@@ -156,6 +156,21 @@ const ProjectSchema = mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    applications: {
+        type: [{
+            freelancer: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Freelancers'
+            },
+            coverLetter: {
+                type: String
+            },
+            createdAt: {
+                type: Date,
+                default: Date.now
+            }
+        }]
     }
 });
 
