@@ -166,7 +166,7 @@ const ProjectSchema = mongoose.Schema({
         type: [{
             freelancer: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'Freelancers'
+                ref: 'Users'
             },
             coverLetter: {
                 type: String
