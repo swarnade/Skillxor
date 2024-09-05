@@ -156,7 +156,13 @@ clientRouter.get("/allprofiles", async (req, res) => {
 // get specific profile
 clientRouter.get("/profile",verifyToken, async (req, res) => {
     const id = req.id;
-    const client = await Clients.findById(id).populate("projects").exec();
+    const client = await Clients.findById(id)
+    .populate({
+        path: 'projects',
+        populate: {
+            path: 'applications.freelancer'
+        }
+    }).exec();
     if (client) {
         return res.status(200).json({
             status: "Success",
