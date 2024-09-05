@@ -60,9 +60,14 @@ const Freelancer = mongoose.Schema({
     Skills:{
         type:Object
     },
-    gig:{
-        type:Object
-    }
+    About:{
+        type:Object,
+        default:[]
+    },
+    Rating:{
+        type:String,
+        default:"no rating",
+    },
 });
 
 
@@ -174,9 +179,6 @@ const ProjectSchema = mongoose.Schema({
     }
 });
 
-const gig = mongoose.Schema({
-    
-});
 // All Models
 const Freelancers = mongoose.model('Users', Freelancer);
 const Clients = mongoose.model('Clients', Client);

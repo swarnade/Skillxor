@@ -86,8 +86,9 @@ freelancer.post("/signup", async (req, res) => {
             Country:"India",
             Bio:"",
             createdAt:Date(),
-            gig:[],
-            Skills:[]
+            Skills:[],
+            About:{},
+            Rating:"no rating",
           };
             
           const DataSave = Freelancers(DataInsert);
@@ -164,25 +165,6 @@ freelancer.post("/login", async (req, res) => {
   main().catch();
 });
 
-
-// --------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------
-//Freelancer All Profile
-freelancer.get('/allprofiles',async(req,res)=>{
-  async function main()
-  {
-    try
-    {
-      const data=await Freelancers.find({})
-      res.status(200).json({status:"Success",profile:data})
-    }
-    catch
-    {
-      res.status(404).json({status:"Failed",profile:null})
-    }
-  } 
-  main().catch()
-})
 
 // --------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
@@ -427,75 +409,85 @@ const storage = multer.diskStorage({
       cb(null,  A);
   }
 });
-
 const Photo_Upload = multer({ storage: storage });
 const A = Photo_Upload.fields([
     { name: 'Picture', maxCount: 1 },
   ]);
 freelancer.post('/profile/picture', A, async(req,res)=>{
-  async function Delete() {
-    const filePath = path.join(__dirname, '../Freelancer_Images/', req.files.Picture[0].filename);
-    fs.unlink(filePath, (err) => {});
-  };
-
+  
   async function main() {
+    async function Delete() {
+      const filePath = path.join(__dirname, '../Freelancer_Images/', req.files.Picture[0].filename);
+      fs.unlink(filePath, (err) => {});
+    };
+    // console.log(req.files.Picture);
     try{
-      let User = await Auth(req.body.Token);
-      if (User) {
-        const File = req.files.Picture[0];
-        const Size = 2 * 1024 * 1024;
+      
+      if(req.files.Picture){
 
-        // console.log(req.files.Picture[0].filename);
-        if (File.size < Size) {
-
+        let User = await Auth(req.body.Token);
+        if (User) {
           
-          if(User.Profile_Picture == ""){
-            await Freelancers.updateOne(
-              {
-                _id: User._id
-              },
-              {
-                $set:{
-                  Profile_Picture: File.filename
-                }
+          const File = req.files.Picture[0];
+          const Size = 2 * 1024 * 1024;
+
+            
+            // console.log(req.files.Picture[0].filename);
+            if (File.size < Size) {
+
+              
+              if(User.Profile_Picture == ""){
+                await Freelancers.updateOne(
+                  {
+                    _id: User._id
+                  },
+                  {
+                    $set:{
+                      Profile_Picture: File.filename
+                    }
+                  }
+                ).then(()=>{
+                  res.status(200).json({status:"Success",message:"Image uploaded successfully"});
+                }).catch(async()=>{
+                  await Delete();
+                  res.status(500).json({status:"Failed",message:"Unable to upload image, try again later."});
+                });
+                
+              }else{
+                
+                const filePath = path.join(__dirname, '../Freelancer_Images/', User.Profile_Picture);
+                await fs.unlink(filePath, (err) => {});
+                await Freelancers.updateOne(
+                  {
+                    _id: User._id
+                  },
+                  {
+                    $set:{
+                      Profile_Picture: File.filename
+                    }
+                  }
+                ).then(()=>{
+                  res.status(200).json({status:"Success",message:"Image uploaded successfully"});
+                }).catch(async()=>{
+                  await Delete();
+                  res.status(500).json({status:"Failed",message:"Unable to upload image, try again later."});
+                });
+                
+                
               }
-            ).then(()=>{
-              res.status(200).json({status:"Success",message:"Image uploaded successfully"});
-            }).catch(async()=>{
+            }else{
               await Delete();
-              res.status(500).json({status:"Failed",message:"Unable to upload image, try again later."});
-            });
-            
-          }else{
-            
-            const filePath = path.join(__dirname, '../Freelancer_Images/', User.Profile_Picture);
-            await fs.unlink(filePath, (err) => {});
-            await Freelancers.updateOne(
-              {
-                _id: User._id
-              },
-              {
-                $set:{
-                  Profile_Picture: File.filename
-                }
-              }
-            ).then(()=>{
-              res.status(200).json({status:"Success",message:"Image uploaded successfully"});
-            }).catch(async()=>{
-              await Delete();
-              res.status(500).json({status:"Failed",message:"Unable to upload image, try again later."});
-            });
-            
-            
-          }
+              res.status(404).json({status:"Failed",message:"Please provide image file less than 2MB."});
+            }
+          
         }else{
           await Delete();
-          res.status(404).json({status:"Failed",message:"Please provide image file less than 2MB."});
+          res.status(404).json({status:"Failed",message:"Please login and try again later."})
+
         }
       }else{
-        await Delete();
-        res.status(404).json({status:"Failed",message:"Please login and try again later."})
-
+        // await Delete();
+        res.status(404).json({status:"Failed",message:"Please provide image file."});
       }
     }catch{
       await Delete();
@@ -505,6 +497,63 @@ freelancer.post('/profile/picture', A, async(req,res)=>{
   main().catch();
 });
 
+// --------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------
+
+freelancer.get("/profile/about/", async (req, res) => {
+
+  async function main(){
+    try{
+      let User = await Auth(req.body.Token);
+      if (User) {
+        res.status(200).json({status:"Success",About: User.About});
+      }else{
+        res.status(404).json({status:"Failed",message:"Please login and try again later."})
+      }
+    }catch{
+      res.status(500).json({status:"Failed",message:"Internal server error"});
+    }
+  };
+  main().catch();
+
+});
+
+freelancer.post("/profile/about/", async (req, res) => {
+  async function main(){
+    try{
+      let User = await Auth(req.body.Token);
+      if (User) {
+        if (req.body.About) {
+          const Ab = req.body.About;
+          // console.log(Ab);
+          await Freelancers.updateOne(
+            {
+              _id: User._id
+            },
+            {
+              $set:{
+                About:Ab
+              }
+            }
+          ).then(()=>{
+            res.status(200).json({status:"Success",message:"About added successfully"});
+          }).catch(()=>{
+            res.status(500).json({status:"Failed",message:"Unable to add about, try again later."});
+          });
+        }else{
+          res.status(404).json({status:"Failed",message:"Please provide about."});
+        }
+      }else{
+        res.status(404).json({status:"Failed",message:"Please login and try again later."})
+      }
+    }catch{
+      res.status(500).json({status:"Failed",message:"Internal server error"});
+    }
+
+    
+  }
+  main().catch();
+});
 // --------------------------------------------------------------------------------------
 // --------------------------------------------------------------------------------------
 
