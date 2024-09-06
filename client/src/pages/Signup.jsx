@@ -31,7 +31,7 @@ export const Signup = () => {
             onChange={(e) => {
               setMobileNumber(e.target.value);
             }}
-            placeholder="Doe"
+            placeholder="9876543210"
             label={"Mobile Number"}
           />
           <InputBox
@@ -48,13 +48,19 @@ export const Signup = () => {
             placeholder="123456@#"
             label={"Create Password"}
           />
+           <InputBox
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            placeholder="123456@#"
+            label={"Confirm Password"}
+          />
           {/* <InputBox onChange={(e) => {
           setPassword(e.target.value)
         }} placeholder="123456@#" label={"Confirm Password"} /> */}
           <div className="pt-4">
             <Button
               onClick={async () => {
-                //put in the url to hit post for signup
                 axios.post(
                   "http://localhost:1234/freelancer/signup",
                   {
@@ -73,6 +79,7 @@ export const Signup = () => {
                   alert("Signup Sucessfully Done");
                   navigate("/login")
                 }).catch((error)=>{
+                  alert("Signup not successful")
                   console.log(error);
                 })
 
