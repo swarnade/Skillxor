@@ -8,11 +8,7 @@ export default function ProfilesPage() {
   useEffect(() => {
     const token = localStorage.getItem('token');
     
-    axios.get('http://localhost:1234/freelancer/allprofiles/', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    })
+    axios.get('http://localhost:1234/freelancer/allprofiles/')
     .then(response => {
       console.log(response.data); // Log the response data
       setProfiles(response.data.profile);
