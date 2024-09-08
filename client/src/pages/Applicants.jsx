@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { Folder, Layers, User, Settings, X } from 'lucide-react';
 
 export default function ProfilesPage() {
   const [profiles, setProfiles] = useState([]);
+  const profilesRef = useRef(null); // Ref to the profiles container
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -18,8 +19,15 @@ export default function ProfilesPage() {
     });
   }, []);
 
+  // Scroll to the bottom whenever profiles are updated
+  useEffect(() => {
+    if (profiles.length > 0) {
+      profilesRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [profiles]);
+
   return (
-    <div className="bg-gray-100 h-screen w-screen p-4">
+    <div className="bg-gray-100 h-screen w-screen p-4 overflow-y-auto">
       <div className="w-full h-full bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="flex h-full">
           {/* Sidebar */}
@@ -32,7 +40,7 @@ export default function ProfilesPage() {
           </div>
 
           {/* Main content */}
-          <div className="w-3/4 p-6">
+          <div className="w-3/4 p-6 overflow-y-auto">
             <h1 className="text-2xl font-bold mb-2">Freelancers</h1>
             <p className="text-gray-600 mb-6">Below are all the profiles registered on the platform.</p>
 
@@ -48,6 +56,8 @@ export default function ProfilesPage() {
               ) : (
                 <p>No profiles found.</p>
               )}
+              {/* This div ensures scrolling to bottom */}
+              <div ref={profilesRef} />
             </div>
           </div>
         </div>
