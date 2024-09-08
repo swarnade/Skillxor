@@ -4,25 +4,27 @@ import { Folder, Layers, User, Settings, X } from 'lucide-react';
 
 export default function ProfilesPage() {
   const [profiles, setProfiles] = useState([]);
-  const profilesRef = useRef(null); // Ref to the profiles container
+  const profilesRef = useRef(null); 
+  const previousProfilesLength = useRef(0);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     
     axios.get('http://localhost:1234/freelancer/allprofiles/')
     .then(response => {
-      console.log(response.data); // Log the response data
+      console.log(response.data);
       setProfiles(response.data.profile);
+      previousProfilesLength.current = response.data.profile.length; 
     })
     .catch(error => {
       console.error('Error fetching profiles:', error);
     });
   }, []);
 
-  // Scroll to the bottom whenever profiles are updated
   useEffect(() => {
-    if (profiles.length > 0) {
+    if (profiles.length > previousProfilesLength.current) {
       profilesRef.current?.scrollIntoView({ behavior: 'smooth' });
+      previousProfilesLength.current = profiles.length; 
     }
   }, [profiles]);
 
@@ -56,7 +58,6 @@ export default function ProfilesPage() {
               ) : (
                 <p>No profiles found.</p>
               )}
-              {/* This div ensures scrolling to bottom */}
               <div ref={profilesRef} />
             </div>
           </div>
@@ -76,7 +77,7 @@ function SidebarItem({ icon, text, active = false }) {
 }
 
 function ProfileCard({ name, description }) {
-  console.log('ProfileCard props:', { name, description }); // Log props
+  console.log('ProfileCard props:', { name, description }); 
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-4 relative">
