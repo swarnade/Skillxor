@@ -1,55 +1,44 @@
-import React from 'react';
+import axios from 'axios';
+import  { useEffect, useRef, useState } from 'react';
+import Sidebar  from '../components/Sidebar';
+import ProjectCard from '../components/ProjectCard'
+
 
 const Dashboard = () => {
+  const [projects, setProjects] = useState([]);
+  const profilesRef = useRef(null); 
+  const previousProfilesLength = useRef(0);
+
+
+  useEffect(()=>{
+   
+    axios.get('http://localhost:1234/projects')
+    .then(response => {
+      console.log(response.data);
+      setProjects(response.data.projects);
+      previousProfilesLength.current = response.data.projects.length; 
+    })
+    .catch(error => {
+      console.error('Error fetching projects:', error);
+    });
+  }, [])
+
+
+  useEffect(() => {
+    if (projects.length > previousProfilesLength.current) {
+      profilesRef.current?.scrollIntoView({ behavior: 'smooth' });
+      previousProfilesLength.current = projects.length; 
+    }
+  }, [projects]);
+
+
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <div className="w-1/5 bg-white p-6 shadow-md">
-        <div className="mb-8">
-          <h1 className="text-lg font-bold">My Projects</h1>
-        </div>
-        <div className="mb-8">
-          <button className="flex items-center w-full p-3 bg-blue-200 text-blue-700 rounded-md">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 10h16M4 14h16M4 18h16"
-              />
-            </svg>
-            Applicants
-          </button>
-        </div>
-        <div>
-          <button className="flex items-center w-full p-3 bg-blue-200 text-blue-700 rounded-md">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 10h16M4 14h16M4 18h16"
-              />
-            </svg>
-            Settings
-          </button>
-        </div>
-      </div>
+    <div className="flex h-screen bg-gray-100">
+      
+      <Sidebar />
 
       {/* Main content */}
-      <div className="flex-1 p-10">
+      <div className="flex-1 p-10 ml-1/4 overflow-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-semibold">Projects</h1>
           <div className="relative">
@@ -77,22 +66,21 @@ const Dashboard = () => {
 
         {/* Project Cards */}
         <div className="grid grid-cols-3 gap-6">
-          {Array(6)
-            .fill(0)
-            .map((_, idx) => (
-              <div key={idx} className="bg-white p-6 rounded-lg shadow-md">
-                <div className="w-full h-32 bg-gray-200 mb-4"></div>
-                <h2 className="text-xl font-semibold">Title</h2>
-                <p className="text-gray-600">Price: $45</p>
-                <p className="text-gray-600">
-                  Description: hi there this project is for all app developer there.
-                </p>
-              </div>
-            ))}
+          {projects.length > 0 ? (  
+              projects.map(projects =>(
+                <ProjectCard
+                  key={projects._id}
+                  title={projects.title}
+                  budget = {projects.budget}
+                  description = {projects.description}
+                />
+              ))
+          ) : (<p>No projects found!!!</p>)}
         </div>
       </div>
     </div>
   );
 };
+
 
 export default Dashboard;

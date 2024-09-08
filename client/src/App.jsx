@@ -6,7 +6,7 @@ import {
 import { Signup } from "./pages/Signup";
 import { Login } from "./pages/Login";
 import Applicants from "./pages/Applicants"
-import Projects from "./pages/Projects"; // Import Applicants component
+import Projects from "./pages/Projects"; 
 
 function App() {
   return (

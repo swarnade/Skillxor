@@ -55,9 +55,7 @@ export const Signup = () => {
             placeholder="123456@#"
             label={"Confirm Password"}
           />
-          {/* <InputBox onChange={(e) => {
-          setPassword(e.target.value)
-        }} placeholder="123456@#" label={"Confirm Password"} /> */}
+          
           <div className="pt-4">
             <Button
               onClick={async () => {
@@ -93,7 +91,7 @@ export const Signup = () => {
           </div>
           <BottomWarning
             label={"Already have an account?"}
-            buttonText={"Sign in"}
+            buttonText={"Log in"}
             to={"/login"}
           />
         </div>
