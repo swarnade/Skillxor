@@ -8,8 +8,7 @@ export default function ProfilesPage() {
   const previousProfilesLength = useRef(0);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    
+
     axios.get('http://localhost:1234/freelancer/allprofiles/')
     .then(response => {
       console.log(response.data);
