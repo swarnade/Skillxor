@@ -91,7 +91,7 @@ export const Signup = () => {
           </div>
           <BottomWarning
             label={"Already have an account?"}
-            buttonText={"Sign in"}
+            buttonText={"Log in"}
             to={"/login"}
           />
         </div>

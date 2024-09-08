@@ -50,8 +50,8 @@ export const Login = () => {
                     setEmail("");
                     setPassword("");
 
-                    navigate("/dashboard");  //dashboard is to be created....
-                    alert("Login Successfully Done");
+                    navigate("/projects");  //this need to be changed later....
+                    alert("Login Successfully Done");  
 
                   }).catch ((error)=> {
                     console.log(error);
