@@ -9,10 +9,6 @@ export default function ProfilesPage() {
   const previousProfilesLength = useRef(0);
 
   useEffect(() => {
-<<<<<<< HEAD
-
-=======
->>>>>>> b9055eaffe21f8623f7c5a03232dcc74d81542a8
     axios.get('http://localhost:1234/freelancer/allprofiles/')
       .then(response => {
         console.log(response.data);
