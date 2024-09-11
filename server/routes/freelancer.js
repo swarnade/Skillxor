@@ -568,6 +568,22 @@ freelancer.get("/allprofiles", async (req, res) => {
   };
   main().catch();
 })
+
+// --------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------
+// Fetch Specific User ID
+freelancer.get('/profile/:id',async (req,res)=>{
+  async function main(){
+    try{
+      const id=req.params['id'];
+      const data = await Freelancers.find({Username:id});
+      res.status(200).json({status:"Success",profile:data});
+    }catch{
+      res.status(404).json({status:"Failed",profile:null});
+    }
+  };
+  main().catch();
+})
 freelancer.get("*", (req, res) => {
   res.status(404).json({status:404, message:"Page not found error || 404 Error"});
 });
