@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { BottomWarning } from "../components/BottomWarning";
-import { Button } from "../components/Button";
-import { Heading } from "../components/Heading";
-import { InputBox } from "../components/InputBox";
-import { SubHeading } from "../components/SubHeading";
+import { BottomWarning } from "../../components/BottomWarning";
+import { Button } from "../../components/Button";
+import { Heading } from "../../components/Heading";
+import { InputBox } from "../../components/InputBox";
+import { SubHeading } from "../../components/SubHeading";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-export const Login = () => {
+export const ClientLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -38,10 +38,10 @@ export const Login = () => {
               onClick={async () => {
                
                 await axios.post(
-                    "http://localhost:1234/freelancer/login",
+                    "http://localhost:1234/client/login",
                     {
-                      Email: email,
-                      Password: password,
+                      email: email,
+                      password: password,
                     }
                   ).then((response)=>{
                     // console.log(response.data)
@@ -50,15 +50,13 @@ export const Login = () => {
                     setEmail("");
                     setPassword("");
 
-                    navigate("/projects");  //this need to be changed later....
+                    navigate("/client/projects");  //this need to be changed later....
                     alert("Login Successfully Done");  
 
                   }).catch ((error)=> {
                     console.log(error);
                     alert("Login Failed");
                   })
-
-              //  localStorage.setItem("token", response.data.token);  placed this inside .then block
 
               }}
               label={"Login"}
@@ -67,7 +65,7 @@ export const Login = () => {
           <BottomWarning
             label={"Don't have an account?"}
             buttonText={"Sign up"}
-            to={"/signup"}
+            to={"/client/signup"}
           />
         </div>
       </div>

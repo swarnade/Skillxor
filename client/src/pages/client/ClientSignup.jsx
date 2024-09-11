@@ -1,17 +1,19 @@
 import { useState } from "react";
-import { BottomWarning } from "../components/BottomWarning";
-import { Button } from "../components/Button";
-import { Heading } from "../components/Heading";
-import { InputBox } from "../components/InputBox";
-import { SubHeading } from "../components/SubHeading";
+import { BottomWarning } from "../../components/BottomWarning";
+import { Button } from "../../components/Button";
+import { Heading } from "../../components/Heading";
+import { InputBox } from "../../components/InputBox";
+import { SubHeading } from "../../components/SubHeading";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-export const Signup = () => {
-  const [name, setName] = useState("");
-  const [mobileNumber, setMobileNumber] = useState("");
+export const ClientSignup = () => {
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [country, setCountry] = useState("");
   const navigate = useNavigate();
 
   return (
@@ -22,17 +24,17 @@ export const Signup = () => {
           <SubHeading label={"Enter your information to create an account"} />
           <InputBox
             onChange={(e) => {
-              setName(e.target.value);
+              setFirstname(e.target.value);
             }}
             placeholder="John"
-            label={"Name"}
+            label={"First Name"}
           />
           <InputBox
             onChange={(e) => {
-              setMobileNumber(e.target.value);
+              setLastname(e.target.value);
             }}
-            placeholder="9876543210"
-            label={"Mobile Number"}
+            placeholder="Doe"
+            label={"Last Name"}
           />
           <InputBox
             onChange={(e) => {
@@ -46,37 +48,47 @@ export const Signup = () => {
               setPassword(e.target.value);
             }}
             placeholder="123456@#"
-            label={"Create Password"}
+            label={"Password"}
           />
-           <InputBox
+          <InputBox
             onChange={(e) => {
-              setPassword(e.target.value);
+              setMobileNumber(e.target.value);
             }}
-            placeholder="123456@#"
-            label={"Confirm Password"}
+            placeholder="9876543210"
+            label={"Mobile Number"}
+          />
+           <InputBox  
+            onChange={(e) => {
+              setCountry(e.target.value);
+            }}
+            placeholder="SRI LANKA"
+            label={"Country"}
           />
           
           <div className="pt-4">
             <Button
               onClick={async () => {
                 axios.post(
-                  "http://localhost:1234/freelancer/signup",
+                  "http://localhost:1234/client/signup",
                   {
-                    Name: name,
-                    Mobile_Number: mobileNumber,
-                    Email: email,
-                    Create_Password: password,
-                    Confirm_Password: password,
+                    firstName: firstname,
+                    lastName : lastname,
+                    mobileNumber: mobileNumber,
+                    email: email,
+                    password: password,
+                    country: country,
                   }
                 ).then((response)=>{
+                  console.log(response);
+                  alert("Signup Sucessfully Done");
+                  navigate("/client/login")
+                }).catch((error)=>{
                   setPassword("");
                   setEmail("");
                   setMobileNumber("");
-                  setName("");
-                  console.log(response);
-                  alert("Signup Sucessfully Done");
-                  navigate("/login")
-                }).catch((error)=>{
+                  setFirstname("");
+                  setLastname("");
+                  setCountry("");
                   alert("Signup not successful")
                   console.log(error);
                 })
@@ -92,7 +104,7 @@ export const Signup = () => {
           <BottomWarning
             label={"Already have an account?"}
             buttonText={"Log in"}
-            to={"/login"}
+            to={"/client/login"}
           />
         </div>
       </div>

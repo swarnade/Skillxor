@@ -1,7 +1,7 @@
 import axios from 'axios';
 import  { useEffect, useRef, useState } from 'react';
-import Sidebar  from '../components/Sidebar';
-import ProjectCard from '../components/ProjectCard'
+import Sidebar  from '../../components/Sidebar';
+import ProjectCard from '../../components/ProjectCard'
 
 
 const Dashboard = () => {
