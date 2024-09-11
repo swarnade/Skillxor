@@ -27,7 +27,7 @@ const routes=[
         path:"applicants", element:(<Applicants />)
     },
     {
-        path:"projectssection", element:(<Projectsection />)
+        path:"/freelancer/projects", element:(<Projectsection />)
     },
     {
         path:"/", element:(<Landing />)
