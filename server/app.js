@@ -5,7 +5,7 @@ const port=process.env.PORT
 const freelancer=require('./routes/freelancer')
 const clientRouter=require("./routes/client_acc");
 const projectsRouter=require("./routes/projects");
-
+const ServerStatus=require('./routes/serverstatus')
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*"); // Allow all origins or specify your domain
@@ -19,6 +19,7 @@ app.use(express.json())
 app.use('/freelancer',freelancer)
 app.use('/client', clientRouter);
 app.use('/projects', projectsRouter);
+app.use('/serverstatus', ServerStatus);
 
 app.get('/',(req,res)=>{
     res.status(404).json({status:"200",description:"success"})
