@@ -38,7 +38,7 @@ export const ClientLogin = () => {
               onClick={async () => {
                
                 await axios.post(
-                    "http://localhost:1234/employer/login",
+                    "http://localhost:1234/client/login",
                     {
                       email: email,
                       password: password,
@@ -65,7 +65,7 @@ export const ClientLogin = () => {
           <BottomWarning
             label={"Don't have an account?"}
             buttonText={"Sign up"}
-            to={"/client/signup"}
+            to={"/employer/signup"}
           />
         </div>
       </div>

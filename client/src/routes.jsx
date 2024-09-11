@@ -5,6 +5,7 @@ import Projects from "./pages/client/Projects";
 import { ClientSignup } from "./pages/client/ClientSignup";
 import { ClientLogin } from "./pages/client/ClientLogin";
 import Projectsection from "./pages/freelancer/Projectsection";
+import Landing from "./pages/Landing"
 
 const routes=[
     {
@@ -20,7 +21,7 @@ const routes=[
         path:"/employer/login", element:(<ClientLogin />)
     },
     {
-        path:"projects", element:(<Projects />)
+        path:"/employer/projects", element:(<Projects />)
     },
     {
         path:"applicants", element:(<Applicants />)
@@ -28,6 +29,9 @@ const routes=[
     {
         path:"projectssection", element:(<Projectsection />)
     },
+    {
+        path:"/", element:(<Landing />)
+    }
 
 ]
 export default routes;
