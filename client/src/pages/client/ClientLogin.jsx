@@ -45,7 +45,7 @@ export const ClientLogin = () => {
                     }
                   ).then((response)=>{
                     // console.log(response.data)
-                    localStorage.setItem("Token", response.data.Token);
+                    localStorage.setItem("token", response.data.token);
                     // console.log(response.data.Token)
                     setEmail("");
                     setPassword("");
