@@ -6,6 +6,9 @@ const freelancer=require('./routes/freelancer')
 const clientRouter=require("./routes/client_acc");
 const projectsRouter=require("./routes/projects");
 const ServerStatus=require('./routes/serverstatus')
+const cors = require('cors');
+
+app.use(cors());
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*"); // Allow all origins or specify your domain
