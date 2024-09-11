@@ -9,7 +9,7 @@ import Applicants from "./pages/Applicants"
 import Projects from "./pages/client/Projects"; 
 import { ClientSignup } from "./pages/client/ClientSignup";
 import { ClientLogin } from "./pages/client/ClientLogin";
-
+import  Projectsection  from "./pages/freelancer/Projectsection";
 
 function App() {
   return (
@@ -23,6 +23,8 @@ function App() {
 
         <Route path="/applicants" element={<Applicants />} /> 
         <Route path="/client/projects" element={<Projects />} /> 
+
+        <Route path="/freelancer/projects" element={<Projectsection />} /> 
       </Routes>
     </BrowserRouter>
   );
