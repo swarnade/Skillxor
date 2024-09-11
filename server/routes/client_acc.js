@@ -99,6 +99,12 @@ clientRouter.post("/login", async (req, res) => {
         email: email,
     })
 
+    if (!client) {
+        return res.status(400).json({
+            messege: "Invalid username or password"
+        })
+    }
+
     const validPass = verifyPassword(password, client.password);
     if (!validPass) {
         return res.status(400).json({

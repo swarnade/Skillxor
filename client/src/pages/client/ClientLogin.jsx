@@ -38,7 +38,7 @@ export const ClientLogin = () => {
               onClick={async () => {
                
                 await axios.post(
-                    "http://localhost:1234/client/login",
+                    "http://localhost:1234/employer/login",
                     {
                       email: email,
                       password: password,
@@ -50,7 +50,7 @@ export const ClientLogin = () => {
                     setEmail("");
                     setPassword("");
 
-                    navigate("/client/projects");  //this need to be changed later....
+                    navigate("/employer/projects");  //this need to be changed later....
                     alert("Login Successfully Done");  
 
                   }).catch ((error)=> {

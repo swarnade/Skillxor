@@ -69,7 +69,7 @@ export const ClientSignup = () => {
             <Button
               onClick={async () => {
                 axios.post(
-                  "http://localhost:1234/client/signup",
+                  "http://localhost:1234/employer/signup",
                   {
                     firstName: firstname,
                     lastName : lastname,
@@ -104,7 +104,7 @@ export const ClientSignup = () => {
           <BottomWarning
             label={"Already have an account?"}
             buttonText={"Log in"}
-            to={"/client/login"}
+            to={"/employer/login"}
           />
         </div>
       </div>
