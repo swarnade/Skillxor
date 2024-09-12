@@ -25,18 +25,24 @@ const Dashboard = () => {
     closeModal(); // Close modal after submitting the form
   };
 
+  const token = localStorage.getItem("token");
+
   useEffect(()=>{
    
-    axios.get('http://localhost:1234/projects')
+    axios.get('http://localhost:1234/client/profile',{
+      headers: {
+        'Authorization': token
+      }
+    })
     .then(response => {
       console.log(response.data);
-      setProjects(response.data.projects);
-      previousProfilesLength.current = response.data.projects.length; 
+      setProjects(response.data.profile.projects);
+      previousProfilesLength.current = response.data.profile.projects.length; 
     })
     .catch(error => {
       console.error('Error fetching projects:', error);
     });
-  }, [projects])
+  }, [projects,token])
 
 
   useEffect(() => {
