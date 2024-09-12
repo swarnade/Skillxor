@@ -6,7 +6,7 @@ import { ClientSignup } from "./pages/client/ClientSignup";
 import { ClientLogin } from "./pages/client/ClientLogin";
 import Projectsection from "./pages/freelancer/Projectsection";
 import Landing from "./pages/Landing"
-
+import Profile from "./pages/freelancer/Profile";
 const routes=[
     {
         path:"/freelancer/signup", element:(<Signup />)
@@ -31,6 +31,9 @@ const routes=[
     },
     {
         path:"/", element:(<Landing />)
+    },
+    {
+        path:'/freelancer/profile/:username',element:(<Profile/>)
     }
 
 ]
