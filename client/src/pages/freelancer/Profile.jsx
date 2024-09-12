@@ -11,9 +11,6 @@ export default function Profile() {
     })
   return (
     <>
-    <div>{details.Name}</div>
-    <div>{details.Email}</div>
-    <div>{details.Mobile_Number}</div>
     </>
   )
 }

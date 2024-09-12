@@ -123,6 +123,7 @@ const Dashboard = () => {
                   title={projects.title}
                   budget = {projects.budget}
                   description = {projects.description}
+                  id={projects._id}
                 />
               ))
           ) : (<p>No projects found!!!</p>)}

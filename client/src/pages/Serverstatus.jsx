@@ -6,7 +6,7 @@ export default function Serverstatus() {
     const [employer,setEmployer]=useState('');
     useEffect(()=>{
         setInterval(()=>{
-            axios.get('http://localhost:1234/serverstatus').then((response)=>{
+            axios.get('http://vps.swarnadeepsahapoddar.in:1234/serverstatus').then((response)=>{
                 setsystemStats(response.data);
                 console.log(response.data);
             });
@@ -24,7 +24,7 @@ export default function Serverstatus() {
 
   return (
     <>
-    <div>{systemStats.UsedMemory}</div>
+    <div>{systemStats.Uptime}</div>
     <div>{freelancer.status}</div>
     <div>{employer.status}</div>
     </>

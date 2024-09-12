@@ -81,7 +81,7 @@ export const ClientSignup = () => {
                 ).then((response)=>{
                   console.log(response);
                   alert("Signup Sucessfully Done");
-                  navigate("/client/login")
+                  navigate("/employer/login")
                 }).catch((error)=>{
                   setPassword("");
                   setEmail("");
