@@ -7,7 +7,7 @@ const secretKey = process.env.JWT_SECRET;
 
 function createToken(payload) {
     const options = {
-        expiresIn: '24h',
+        expiresIn: '10d',
         issuer: 'SIH2024',
     };
     return jwt.sign(payload, secretKey, options);;
