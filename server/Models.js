@@ -14,9 +14,6 @@ db.once('open',() => {
 
 // Freelancer Schema
 const Freelancer = mongoose.Schema({
-    _id: {
-        type:String,
-    },
     Username: {
         type:String,
         maxLength: 30,

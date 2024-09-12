@@ -63,7 +63,7 @@ freelancer.post("/signup", async (req, res) => {
 
         while (true) {
           ID = Profile_ID();
-          const FreelancersData = await Freelancers.findOne({_id:ID});
+          const FreelancersData = await Freelancers.findOne({Username:ID});
           if (FreelancersData == null) {
             break;
           };          
@@ -76,7 +76,6 @@ freelancer.post("/signup", async (req, res) => {
           const Pass = await hashPassword(req.body.Create_Password);
           
           const DataInsert = {
-            _id: ID,
             Username:ID,
             Name: req.body.Name,
             Mobile_Number: req.body.Mobile_Number,
@@ -98,12 +97,13 @@ freelancer.post("/signup", async (req, res) => {
             res.status(500).json({status:500, success:false, message:"Unable to create account, try again later."});
           });
         }else{
-          res.status(404).json({status:404, success:false, message:"Already have an account with this email, either client side or freelancer side."});
+          res.status(404).json({status:404, success:false, message:"Already have an account with this email."});
         }
       }else{
         res.status(404).json({status:404, success:false, message:Validation});
       }
-    }catch {
+    }catch (e) {
+      console.log(e);
       res.status(500).json({status:500, success:false, message:"Unable to create account, try again later."});
     };
   }
@@ -142,7 +142,7 @@ freelancer.post("/login", async (req, res) => {
               res.status(200).json({
                 status:200, 
                 success:true, 
-                message:"Login successful.", 
+                message:"Login successful.",
                 Token: createToken({profileID: FreelancersData._id,Log: Log_Token})
               });
             }).catch(()=>{
@@ -418,7 +418,7 @@ freelancer.post('/profile/picture', A, async(req,res)=>{
   async function main() {
     async function Delete() {
       const filePath = path.join(__dirname, '../Freelancer_Images/', req.files.Picture[0].filename);
-      fs.unlink(filePath, (err) => {});
+      fs.unlink(filePath, (err) => {}).catch();
     };
     // console.log(req.files.Picture);
     try{
