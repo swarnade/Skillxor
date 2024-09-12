@@ -4,7 +4,7 @@ module.exports = function verifyToken(req, res, next) {
     const token = req.headers.authorization;
     try {
         const verified = jwt.verify(token, process.env.JWT_SECRET);
-        const id = verified.id;
+        const id = verified.profileID;
         req.id = id;
         next();
     } catch (err) {
