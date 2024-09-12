@@ -87,6 +87,7 @@ export const Signup = () => {
                 // // navigate("/dashboard")
               }}
               label={"Sign up"}
+              to={"/freelancer/projects"}
             />
           </div>
           <BottomWarning

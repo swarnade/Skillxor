@@ -50,7 +50,7 @@ export const Login = () => {
                     setEmail("");
                     setPassword("");
 
-                    navigate("/projects");  //this need to be changed later....*******
+                    navigate("/freelancer/projects");  //this need to be changed later....*******
                     alert("Login Successfully Done");  
 
                   }).catch ((error)=> {
@@ -62,6 +62,7 @@ export const Login = () => {
 
               }}
               label={"Login"}
+          
             />
           </div>
           <BottomWarning

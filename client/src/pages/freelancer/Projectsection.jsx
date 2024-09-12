@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import FreelancerSidebar from '../../components/FreelancerSidebar';
 
-
 const ProjectModal = ({ project, onClose, onApply }) => {
+  const [coverLetter, setCoverLetter] = useState(''); // State to store cover letter
+
   if (!project) return null;
 
   return (
@@ -12,9 +13,17 @@ const ProjectModal = ({ project, onClose, onApply }) => {
         <h2 className="text-2xl font-bold mb-4">{project.title}</h2>
         <p className="text-lg mb-4">{project.description}</p>
         <p className="text-lg font-semibold mb-4">Budget: ${project.budget}</p>
+
+        <textarea
+          value={coverLetter}
+          onChange={(e) => setCoverLetter(e.target.value)}
+          placeholder="Write your cover letter here"
+          className="w-full h-24 p-2 border rounded-lg mb-4"
+        />
+
         <div className="flex justify-between items-center">
           <button
-            onClick={() => onApply(project)} 
+            onClick={() => onApply(project, coverLetter)} // Pass cover letter as parameter
             className={`${
               project.status === 'open'
                 ? 'bg-green-500 hover:bg-green-600'
@@ -38,7 +47,7 @@ const ProjectModal = ({ project, onClose, onApply }) => {
 
 const Toast = ({ message, onClose }) => {
   useEffect(() => {
-    const timer = setTimeout(onClose, 3000); 
+    const timer = setTimeout(onClose, 3000);
     return () => clearTimeout(timer);
   }, [onClose]);
 
@@ -53,16 +62,15 @@ const Projectsection = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedProject, setSelectedProject] = useState(null); 
-  const [showToast, setShowToast] = useState(false); 
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [showToast, setShowToast] = useState(false);
 
-  // Fetch projects from the backend using axios GET request
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get("http://localhost:1234/projects"); // Axios GET request to the backend
+        const response = await axios.get('http://localhost:1234/projects');
         if (response.status === 200) {
-          setProjects(response.data.projects); // Assuming your API returns { projects: [...] }
+          setProjects(response.data.projects);
         } else {
           setError(response.data.message || 'Something went wrong');
         }
@@ -76,19 +84,39 @@ const Projectsection = () => {
     fetchProjects();
   }, []);
 
-  // Function to handle project application
-  const handleApply = (project) => {
-    // Here you can implement your apply logic, e.g., send an API request
-    console.log(`Applied to project: ${project.title}`);
+  const handleApply = async (project, coverLetter) => {
+    const jwtToken = localStorage.getItem('Token'); 
 
-    // Show the success toast for 3 seconds
-    setShowToast(true);
+    if (!jwtToken) {
+      console.error('JWT token not found');
+      return; 
+    }
 
-    // Close the modal after applying
-    setSelectedProject(null);
+    console.log('JWT Token:', jwtToken); 
+
+    try {
+      const response = await axios.post(
+        `http://localhost:1234/projects/apply/${project._id}`,
+        {
+          coverLetter, 
+        },
+        {
+          headers: {
+            Authorization: `${jwtToken}`, 
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log(`Successfully applied to project: ${project.title}`);
+        setShowToast(true); 
+        setSelectedProject(null); 
+      }
+    } catch (error) {
+      console.error('Error applying for project:', error);
+    }
   };
 
-  // Helper function to limit description to 10 words
   const limitDescription = (description) => {
     const words = description.split(' ');
     return words.length > 10
@@ -106,14 +134,12 @@ const Projectsection = () => {
           <FreelancerSidebar />
           <div className="flex flex-col w-full p-4">
             <h1 className="text-2xl font-semibold mb-4">Projects</h1>
-
-            {/* Scrollable Project List */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-y-auto h-[80vh]">  {/* Added scrolling */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 overflow-y-auto h-[80vh]">
               {projects.map((project) => (
                 <div
                   key={project._id}
                   className="border p-4 rounded-lg shadow-md bg-white cursor-pointer"
-                  onClick={() => setSelectedProject(project)} // Open modal on click
+                  onClick={() => setSelectedProject(project)}
                 >
                   <div className="mb-4">
                     <h2 className="text-xl font-semibold">{project.title}</h2>
@@ -152,20 +178,18 @@ const Projectsection = () => {
         </div>
       </div>
 
-      {/* Modal to show selected project details */}
       {selectedProject && (
         <ProjectModal
           project={selectedProject}
-          onClose={() => setSelectedProject(null)} // Close modal when "Close" is clicked
-          onApply={handleApply} // Apply logic
+          onClose={() => setSelectedProject(null)}
+          onApply={handleApply}
         />
       )}
 
-      {/* Toast Notification */}
       {showToast && (
         <Toast
           message="Successfully applied!"
-          onClose={() => setShowToast(false)} // Close toast after showing it
+          onClose={() => setShowToast(false)}
         />
       )}
     </div>
