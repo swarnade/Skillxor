@@ -14,7 +14,7 @@ const Auth = async (cook) => {
             if (obj) {
                 // check if the token is valid or not by checking the options
                 if (obj.iss == "SIH2024") {
-                    const profileID = obj.profileID;
+                    const profileID = obj.id;
                     const user1 = await Freelancers.findOne({_id:profileID});
                     // if the user is found using the cookie and the log is same as the log in the database the return the user obj
                     if (user1) {

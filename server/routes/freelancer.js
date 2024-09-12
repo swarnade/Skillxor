@@ -143,7 +143,7 @@ freelancer.post("/login", async (req, res) => {
                 status:200, 
                 success:true, 
                 message:"Login successful.",
-                Token: createToken({profileID: FreelancersData._id,Log: Log_Token})
+                Token: createToken({id: FreelancersData._id,Log: Log_Token})
               });
             }).catch(()=>{
               res.status(500).json({status:500, success:false, message:"Unable to login, try again later.1"});
@@ -576,7 +576,7 @@ freelancer.get('/profile/:id',async (req,res)=>{
   async function main(){
     try{
       const id=req.params['id'];
-      const data = await Freelancers.find({Username:id});
+      const data = await Freelancers.findById(id);
       res.status(200).json({status:"Success",profile:data});
     }catch{
       res.status(404).json({status:"Failed",profile:null});

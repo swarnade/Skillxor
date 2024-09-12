@@ -45,7 +45,6 @@ projectRouter.post("/apply/:id", verifyToken, async (req, res) => {
     const projectId = req.params.id;
     const { coverLetter } = req.body;
     const project = await Projects.findById(projectId);
-
     if (project) {
         project.applications.push({
             freelancer: freelancerId,

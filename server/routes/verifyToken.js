@@ -2,9 +2,10 @@ const jwt = require('jsonwebtoken');
 
 module.exports = function verifyToken(req, res, next) {
     const token = req.headers.authorization;
+    console.log(token)
     try {
         const verified = jwt.verify(token, process.env.JWT_SECRET);
-        const id = verified.profileID;
+        const id = verified.id;
         req.id = id;
         next();
     } catch (err) {
