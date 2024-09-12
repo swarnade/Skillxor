@@ -1,72 +1,91 @@
-import { useState } from "react";
-import { BottomWarning } from "../../components/BottomWarning";
-import { Button } from "../../components/Button";
-import { Heading } from "../../components/Heading";
-import { InputBox } from "../../components/InputBox";
-import { SubHeading } from "../../components/SubHeading";
+import React, { useState } from "react";
+import { useNavigate, NavLink } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { Header } from "../../components/header";
 
 export const ClientLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post("http://localhost:1234/client/login", {
+        email: email,
+        password: password,
+      });
+      localStorage.setItem("token", response.data.token);
+      setEmail("");
+      setPassword("");
+      alert("Login Successfully Done");
+      navigate("/employer/projects");
+    } catch (error) {
+      alert("Login Failed");
+      console.error(error);
+    }
+  };
+
   return (
-    <div className="bg-slate-300 h-screen flex justify-center">
-      <div className="flex flex-col justify-center">
-        <div className="rounded-lg bg-white w-90 text-center p-2 h-max px-6">
-          <Heading label={"Login"} />
-          <SubHeading label={"Enter your credentials to sign in"} />
-          <InputBox
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            placeholder="abcd@gmail.com"
-            label={"Email"}
-          />
-          <InputBox
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            placeholder="********"
-            label={"Password"}
-            type="password"
-          />
-          <div className="pt-4">
-            <Button
-              onClick={async () => {
-               
-                await axios.post(
-                    "http://localhost:1234/client/login",
-                    {
-                      email: email,
-                      password: password,
-                    }
-                  ).then((response)=>{
-                    // console.log(response.data)
-                    localStorage.setItem("token", response.data.token);
-                    // console.log(response.data.Token)
-                    setEmail("");
-                    setPassword("");
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 flex flex-col">
+      {/* Fixed Header */}
+      <Header className="fixed top-0 left-0 w-full z-10" />
 
-                    navigate("/employer/projects");  //this need to be changed later....
-                    alert("Login Successfully Done");  
+      {/* Main Content */}
+      <div className="flex-grow flex items-center justify-center pt-16"> {/* Adjust padding top to make space for the fixed header */}
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-8 space-y-6">
+          <h1 className="text-3xl font-extrabold text-center dark:text-indigo-900">Log in</h1>
+          <p className="text-center text-gray-500">Enter your credentials below to access your account</p>
 
-                  }).catch ((error)=> {
-                    console.log(error);
-                    alert("Login Failed");
-                  })
+          <div className="space-y-5">
+            {/* Email Input */}
+            <div className="relative">
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent pl-12"
+              />
+              <Mail className="absolute left-4 top-3 h-5 w-5 text-gray-400" />
+            </div>
 
-              }}
-              label={"Login"}
-            />
+            {/* Password Input */}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent pl-12 pr-12"
+              />
+              <Lock className="absolute left-4 top-3 h-5 w-5 text-gray-400" />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-4 top-3 text-gray-400 focus:outline-none"
+              >
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              </button>
+            </div>
           </div>
-          <BottomWarning
-            label={"Don't have an account?"}
-            buttonText={"Sign up"}
-            to={"/employer/signup"}
-          />
+
+          {/* Log In Button */}
+          <button
+            onClick={handleLogin}
+            className="w-full dark:bg-indigo-900 text-white rounded-lg py-3 px-4 font-bold"
+          >
+            Log in
+          </button>
+
+          {/* Sign Up Redirect */}
+          <p className="text-center text-gray-600">
+            Don't have an account?{" "}
+            <NavLink to="/employer/signup" className="text-indigo-600 hover:underline">
+              Sign up
+            </NavLink>
+          </p>
         </div>
       </div>
     </div>
