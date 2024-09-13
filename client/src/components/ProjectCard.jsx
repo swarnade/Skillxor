@@ -15,7 +15,7 @@ export default function ProjectCard({id,title, budget, description}){
                   <p className="text-gray-600">
                     Description: {description}
                   </p>
-                  <button onClick={btn}>Hello</button>
+                  <button onClick={btn} className="text-green-800 font-bold">View Applicants</button>
       </div>
     )
   }

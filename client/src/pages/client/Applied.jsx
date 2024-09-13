@@ -22,7 +22,12 @@ export default function Applied() {
         });
       }, [token])
   return (
-    <div>      {details.map((name, index) => (
+    <div> 
+      <div className='p-6'>
+      <h1 className="text-2xl font-bold mb-2">Freelancers</h1>
+      <p className="text-gray-600 mb-6">Below are the profiles of freelancers who applied to the project.</p>
+      </div>
+           {details.map((name, index) => (
         <AppliedDetails username={name.freelancer} key={index}/>
       ))}</div>
   )

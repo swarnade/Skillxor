@@ -31,7 +31,7 @@ const FreelancerSidebar = () => {
       <div className="hidden md:flex flex-col items-start space-y-6">
         <SidebarItem
           icon={<Folder size={32} />} 
-          text="My Projects"
+          text="All Projects"
           active={activeItem === 'projects'}
           onClick={() => handleItemClick('projects', '/freelancer/projects')}
         />
@@ -39,14 +39,14 @@ const FreelancerSidebar = () => {
           icon={<User size={32} />} 
           text="Profile"
           active={activeItem === 'profile'}
-          onClick={() => handleItemClick('profile', '/freelancer/profile')}
+          onClick={() => handleItemClick('profile', '/freelancer/projects')}
         />
         <div className="flex-grow" />
         <SidebarItem
           icon={<Settings size={32} />} 
           text="Settings"
           active={activeItem === 'settings'}
-          onClick={() => handleItemClick('settings', '/freelancer/settings')}
+          onClick={() => handleItemClick('settings', '/freelancer/projects')}
         />
       </div>
 
