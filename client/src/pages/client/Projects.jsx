@@ -28,7 +28,7 @@ const Dashboard = () => {
   const token = localStorage.getItem("token");
 
   useEffect(()=>{
-   
+    document.title='Employer | Dashboard'
     axios.get('http://localhost:1234/client/profile',{
       headers: {
         'Authorization': token
