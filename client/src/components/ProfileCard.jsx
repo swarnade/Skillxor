@@ -1,9 +1,13 @@
 import React from 'react'
 import {  X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
-const ProfileCard = ({ name, description }) => {
-    console.log('ProfileCard props:', { name, description });
-
+const ProfileCard = ({ name, description ,id}) => {
+    console.log('ProfileCard props:', { name, description ,id});
+    const navigate=useNavigate();
+    const btn=()=>{
+navigate(`/freelancer/profile/${id}`)
+    }
     return <div className="bg-white border border-gray-200 rounded-lg p-4 relative">
                 <button className="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
                     <X size={20} />
@@ -13,7 +17,7 @@ const ProfileCard = ({ name, description }) => {
                         <div className="flex-grow">
                             <h2 className="text-lg font-semibold mb-2">{name}</h2>
                             <p className="text-gray-600 text-sm mb-3">{description}</p>
-                            <button className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md text-sm hover:bg-gray-300">
+                            <button className="bg-gray-200 text-gray-700 px-3 py-1 rounded-md text-sm hover:bg-gray-300" onClick={btn}>
                                 View Profile
                             </button>
                         </div>

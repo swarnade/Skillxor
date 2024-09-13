@@ -13,7 +13,6 @@ export default function ProfilesPage() {
       .then(response => {
         console.log(response.data);
         setProfiles(response.data.profile);
-        previousProfilesLength.current = response.data.profile.length;
       })
       .catch(error => {
         console.error('Error fetching profiles:', error);
@@ -41,17 +40,14 @@ export default function ProfilesPage() {
             <p className="text-gray-600 mb-6">Below are all the profiles registered on the platform.</p>
 
             <div className="space-y-4">
-              {profiles.length > 0 ? (
-                profiles.map(profile => (
+{                profiles.map(profile => (
                   <ProfileCard
                     key={profile._id}
+                    id={profile._id}
                     name={profile.Name}
                     description={profile.Bio} 
                   />
-                ))
-              ) : (
-                <p>No profiles found.</p>
-              )}
+                ))}
               <div ref={profilesRef} />
             </div>
           </div>
