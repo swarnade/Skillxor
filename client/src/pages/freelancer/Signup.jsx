@@ -9,22 +9,26 @@ export const Signup = () => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSignup = async () => {
     try {
-      const response = await axios.post("http://localhost:1234/freelancer/signup", {
+      console.log(name, mobileNumber, email, password, confirmPassword);
+      await axios.post("http://localhost:1234/freelancer/signup", {
         Name: name,
         Mobile_Number: mobileNumber,
         Email: email,
         Create_Password: password,
-        Confirm_Password: password,
+        Confirm_Password: confirmPassword,
       });
       setPassword("");
       setEmail("");
       setMobileNumber("");
       setName("");
+      setConfirmPassword("");
       alert("Signup Successfully Done");
       navigate("/freelancer/login");
     } catch (error) {
@@ -92,7 +96,7 @@ export const Signup = () => {
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
-                placeholder="Password"
+                placeholder="Create Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent pl-12 pr-12"
@@ -104,6 +108,25 @@ export const Signup = () => {
                 className="absolute right-4 top-3 text-gray-400 focus:outline-none"
               >
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+              </button>
+            </div>
+
+            {/* Confirm Password Input */}
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent pl-12 pr-12"
+              />
+              <Lock className="absolute left-4 top-3 h-5 w-5 text-gray-400" />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-4 top-3 text-gray-400 focus:outline-none"
+              >
+                {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
 

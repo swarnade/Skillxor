@@ -12,7 +12,7 @@ const ProjectModal = ({ project, onClose, onApply }) => {
       <div className="bg-white rounded-lg shadow-lg w-1/2 p-6">
         <h2 className="text-2xl font-bold mb-4">{project.title}</h2>
         <p className="text-lg mb-4">{project.description}</p>
-        <p className="text-lg font-semibold mb-4">Budget: ${project.budget}</p>
+        <p className="text-lg font-semibold mb-4">Budget: ₹ {project.budget}</p>
 
         <textarea
           value={coverLetter}
@@ -145,7 +145,7 @@ const Projectsection = () => {
                     <h2 className="text-xl font-semibold">{project.title}</h2>
                   </div>
                   <div className="mb-2">
-                    <p className="text-lg font-bold">${project.budget}</p>
+                    <p className="text-lg font-bold">₹ {project.budget}</p>
                   </div>
                   <div className="mb-2">
                     <p className="text-gray-600">

@@ -39,7 +39,7 @@ const Sidebar = () => {
       />
       <SidebarItem 
         icon={<Layers />} 
-        text="Applicants" 
+        text="All Freelancers" 
         active={activeItem === "applicants"} 
         onClick={() => handleItemClick("applicants", "/applicants")} 
       />
