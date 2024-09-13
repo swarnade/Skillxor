@@ -13,7 +13,7 @@ const Sidebar = () => {
     const path = location.pathname;
 
     
-    if (path === "/projects") {
+    if (path === "/employer/projects") {
       setActiveItem("projects");
     } else if (path === "/applicants") {
       setActiveItem("applicants");
@@ -22,7 +22,7 @@ const Sidebar = () => {
     } else if (path === "/settings") {
       setActiveItem("settings");
     }
-  }, [location]); 
+  }, []); 
 
   const handleItemClick = (item, path) => {
     setActiveItem(item); 
@@ -35,7 +35,7 @@ const Sidebar = () => {
         icon={<Folder />} 
         text="My Projects" 
         active={activeItem === "projects"} 
-        onClick={() => handleItemClick("projects", "/projects")} 
+        onClick={() => handleItemClick("projects", "/employer/projects")} 
       />
       <SidebarItem 
         icon={<Layers />} 

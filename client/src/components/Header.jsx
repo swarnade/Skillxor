@@ -48,8 +48,7 @@ export const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <NavLink to="/" className="flex items-center space-x-2">
-            <img src="/placeholder.svg?height=40&width=40" alt="Logo" className="h-10 w-10" />
-            <span className="text-xl font-bold text-indigo-900 dark:text-white">YourLogo</span>
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS01p5QVClsPyStMi8Tgx_GDTUhnnVoB-h4Nw&s" alt="Logo" className="h-20 w-30" />
           </NavLink>
           
           {/* Navigation Items */}

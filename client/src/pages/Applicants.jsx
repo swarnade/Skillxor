@@ -28,7 +28,7 @@ export default function ProfilesPage() {
   }, [profiles]);
 
   return (
-    <div className="bg-gray-100 h-screen w-screen p-4 overflow-y-auto">
+    <div className="bg-gray-100 h-screen w-screen overflow-y-auto">
       <div className="w-full h-full bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="flex h-full">
           {/* Sidebar */}

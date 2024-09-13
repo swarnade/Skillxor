@@ -10,12 +10,29 @@ import Profile from "./pages/freelancer/Profile";
 import Serverstatus from "./pages/Serverstatus";
 import Applied from "./pages/client/Applied";
 const routes=[
+
+    //Main Landing Page
+    {
+        path:"/", element:(<Landing />)
+    },
+
+
+    //Freelancer Interface Route
     {
         path:"/freelancer/signup", element:(<Signup />)
     },
     {
         path:"/freelancer/login", element:(<Login />)
     },
+    {
+        path:"/freelancer/projects", element:(<Projectsection />)
+    },
+    {
+        path:'/freelancer/profile/:username',element:(<Profile/>)
+    },
+
+
+    //Employer Interface Route
     {
         path:"/employer/signup", element:(<ClientSignup />)
     },
@@ -26,23 +43,17 @@ const routes=[
         path:"/employer/projects", element:(<Projects />)
     },
     {
+        path:'/project/applied/:id',element:(<Applied/>)
+    },
+    {
         path:"applicants", element:(<Applicants />)
     },
-    {
-        path:"/freelancer/projects", element:(<Projectsection />)
-    },
-    {
-        path:"/", element:(<Landing />)
-    },
-    {
-        path:'/freelancer/profile/:username',element:(<Profile/>)
-    },
+
+    //Server Info
     {
         path:'/serverstatus',element:(<Serverstatus/>)
     },
-    {
-        path:'/project/applied/:id',element:(<Applied/>)
-    }
+
 
 ]
 export default routes;
