@@ -15,17 +15,17 @@ export default function ServerStatus() {
 
   useEffect(() => {
     const fetchStatus = () => {
-      axios.get('http://localhost:1234/serverstatus').then((response) => {
+      axios.get('http://vps.swarnadeepsahapoddar.in:1234/serverstatus').then((response) => {
         setSystemStats(response.data);
         setMemoryData((prevData) => [...prevData.slice(-9), response.data.UsedMemory]); // Keep the last 10 data points
         setUptimeData((prevData) => [...prevData.slice(-9), response.data.Uptime]);
         console.log(response.data);
       });
-      axios.get('http://localhost:1234/freelancer').then((response) => {
+      axios.get('http://vps.swarnadeepsahapoddar.in:1234/freelancer').then((response) => {
         setFreelancer(response.data);
         console.log(response.data);
       });
-      axios.get('http://localhost:1234/client').then((response) => {
+      axios.get('http://vps.swarnadeepsahapoddar.in:1234/client').then((response) => {
         setEmployer(response.data);
         console.log(response.data);
       });

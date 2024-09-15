@@ -16,7 +16,7 @@ export const Header = () => {
 
   const navItems = [
     { to: '/', label: 'Home' },
-    { to: '/about', label: 'About' },
+    { to: '/serverstatus', label: 'Server Status' },
     { to: '/contact', label: 'Contact' },
   ];
 
