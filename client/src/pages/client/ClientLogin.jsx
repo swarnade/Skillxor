@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
 import axios from "axios";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
-import { Header } from "../../components/header";
+import { Header } from "../../components/Header";
 
 export const ClientLogin = () => {
   const [email, setEmail] = useState("");

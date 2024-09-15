@@ -1,7 +1,7 @@
 // LandingPage.jsx
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Header } from '../components/header';
+import { Header } from '../components/Header';
 
 const LandingPage = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
